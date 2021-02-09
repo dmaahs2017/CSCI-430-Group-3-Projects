@@ -14,7 +14,7 @@ public class Supplier implements Serializable {
     return name;
   }
 
-  public void getName(String name) {
+  public void setName(String name) {
       this.name = name;
   }
 
