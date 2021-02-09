@@ -41,7 +41,7 @@ public class Client implements Serializable {
         lastName = newLastName;
     }
 
-    public void setAdress(String newAdressName) {
+    public void setAddress(String newAdressName) {
         adress = newAdressName;
     }
 

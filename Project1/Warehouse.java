@@ -37,9 +37,82 @@ public class Warehouse {
         return p;
     }
 
-    //set product info (name quant price)
+    //set product info (Product, name quant price)
+    public Boolean setProductInfo(String id, String name, int quant, double salePrice, double supplyPrice) {
+        Product p = this.getProductById(id);
+        if ( p == null ) {
+            return false;
+        }
+        p.setName(name);
+        p.setQuantity(quant);
+        p.setSalePrice(salePrice);
+        p.setSupplyPrice(supplyPrice);
+        return true;
+    }
+
+
     //get client by id
+    public Client getClientById(String id) {
+        Iterator<Client> clients = ClientList.instance().getClients();
+
+        Client p = null;
+        while (clients.hasNext() || p != null) {
+            Client tmp = clients.next();
+            if ( tmp.getClientId() == id ) {
+                p = tmp;
+            }
+        }
+
+        return p;
+    }
+
     //set client info (fname, lname, addrs)
+    public Boolean setClientInfo(String id, String fname, String lname, String address) {
+        Client p = this.getClientById(id);
+        if ( p == null ) {
+            return false;
+        }
+        p.setFirstName(fname);
+        p.setLastName(lname);
+        p.setAddress(address);
+        return true;
+
+    }
+
     //add supplier
-    //set supplier info ()
+    public Supplier addSuplier(String name, String id) {
+        Supplier supplier = new Supplier(name, id);
+
+        if (SupplierList.instance().insertSupplier(supplier)) {
+            return supplier;
+        } else {
+            return null;
+        }
+    }
+
+    // get supplier by id
+    public Supplier getSupplierById(String id) {
+        Iterator<Supplier> suppliers = SupplierList.instance().getSuppliers();
+
+        Supplier s = null;
+        while (suppliers.hasNext() || s != null) {
+            Supplier tmp = suppliers.next();
+            if ( tmp.getId() == id ) {
+                s = tmp;
+            }
+        }
+
+        return s;
+    }
+
+    //set supplier info
+    public Boolean setSupplierInfo(String id, String name) {
+        Supplier supplier = this.getSupplierById(id);
+        if ( supplier == null ) {
+            return false;
+        }
+        supplier.setName(name);
+        return true;
+
+    }
 }
