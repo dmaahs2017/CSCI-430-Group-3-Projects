@@ -1,4 +1,6 @@
 import java.util.*;
+import java.text.*;
+import java.io.*;
 public class ProductTester {
   
   public static void main(String[] s) {
@@ -7,7 +9,7 @@ public class ProductTester {
      ProductList productList = ProductList.instance();
      productList.insertProduct(p1);
      productList.insertProduct(p2);
-     Iterator<Product> products = productList.getProducts();
+     Iterator products = productList.getProducts();
      System.out.println("List of products");
      while (products.hasNext()){
        System.out.println(products.next());
