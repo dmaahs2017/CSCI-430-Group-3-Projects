@@ -10,7 +10,7 @@ public class Client implements Serializable {
     private String lastName;
     private String adress;
 
-    public Client (String firstName, String lastName, String adress) {
+    public Client (String firstName, String lastName, String adress, String clientId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.adress = adress;
