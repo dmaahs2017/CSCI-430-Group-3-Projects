@@ -11,11 +11,11 @@ public class SupplierTester {
 
          //test getName
          System.out.println(s1.getName() + " should be 's1_name'");
-         System.out.println(s1.getName() + " should be 's2_name'");
+         System.out.println(s2.getName() + " should be 's2_name'");
 
          //test getId
          System.out.println(s1.getId() + " should be 's1_id'");
-         System.out.println(s1.getId() + " should be 's2_id'");
+         System.out.println(s2.getId() + " should be 's2_id'");
 
          //test setName
          s1.setName("s1_new_name");
