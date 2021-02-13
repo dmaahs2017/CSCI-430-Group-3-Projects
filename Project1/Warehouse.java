@@ -1,5 +1,15 @@
 import java.util.*;
 public class Warehouse {
+    private static Warehouse warehouse;
+
+    public static Warehouse instance() {
+        if (warehouse == null) {
+            return warehouse = new Warehouse();
+        } else {
+            return warehouse;
+        }
+    }
+
     //add client
     public Client addClient(String clientId, String fname, String lname, String address) {
         Client client = new Client(fname, lname, address, clientId);
@@ -37,6 +47,10 @@ public class Warehouse {
         return p;
     }
 
+    public Iterator<Product> getProducts() {
+        return ProductList.instance().getProducts();
+    }
+
     //set product info (Product, name quant price)
     public Boolean setProductInfo(String id, String name, int quant, double salePrice, double supplyPrice) {
         Product p = this.getProductById(id);
@@ -66,6 +80,10 @@ public class Warehouse {
         return p;
     }
 
+    public Iterator<Client> getClients() {
+      return ClientList.instance().getClients();
+    }
+
     //set client info (fname, lname, addrs)
     public Boolean setClientInfo(String id, String fname, String lname, String address) {
         Client p = this.getClientById(id);
@@ -80,7 +98,7 @@ public class Warehouse {
     }
 
     //add supplier
-    public Supplier addSuplier(String name, String id) {
+    public Supplier addSupplier(String name, String id) {
         Supplier supplier = new Supplier(name, id);
 
         if (SupplierList.instance().insertSupplier(supplier)) {
@@ -103,6 +121,10 @@ public class Warehouse {
         }
 
         return s;
+    }
+
+    public Iterator<Supplier> getSuppliers() {
+      return SupplierList.instance().getSuppliers();
     }
 
     //set supplier info
