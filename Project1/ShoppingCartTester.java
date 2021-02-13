@@ -16,7 +16,7 @@ public class ShoppingCartTester {
 
     // test shopping cart with 1 product added
     shoppingCart.insertProductToCart(p1,1);
-    System.out.println("Shopping Cart should have 1 of product 'p1'");
+    System.out.println("Shopping Cart should have 1 of product 'product1'");
     cartProduct = shoppingCart.getShoppingCartProducts();
     while (cartProduct.hasNext()){
       System.out.println(cartProduct.next());
@@ -25,7 +25,7 @@ public class ShoppingCartTester {
 
     // test adding another product, with a quantity of 3, to the shopping cart
     shoppingCart.insertProductToCart(p2, 3);
-    System.out.println("Shopping Cart should have 2 products: 1 of 'p1', and 3 of 'p2'");
+    System.out.println("Shopping Cart should have 2 products: 1 of 'product1', and 3 of 'product2'");
     cartProduct = shoppingCart.getShoppingCartProducts();
     while (cartProduct.hasNext()){
       System.out.println(cartProduct.next());
