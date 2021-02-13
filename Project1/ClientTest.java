@@ -1,6 +1,4 @@
 import java.util.*;
-import java.text.*;
-import java.io.*;
 
 public class ClientTest {
 
@@ -23,8 +21,8 @@ public class ClientTest {
         c1.setLastName("Bravo");
         System.out.println("client name should be Alpha Bravo : " + c1.getFirstName() + " " + c1.getLastName());
 
-        c1.setAdress("court yard name and city");
-        System.out.println("client adress should be court yard name and city : " + c1.getAdress());
+        c1.setAddress("court yard name and city");
+        System.out.println("client address should be court yard name and city : " + c1.getAddress());
 
         System.out.println(list.toString());
     }

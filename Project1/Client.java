@@ -1,4 +1,3 @@
-import java.util.*;
 import java.io.*;
 
 public class Client implements Serializable {
@@ -8,12 +7,12 @@ public class Client implements Serializable {
     private String clientId;
     private String firstName;
     private String lastName;
-    private String adress;
+    private String address;
 
-    public Client (String firstName, String lastName, String adress, String clientId) {
+    public Client (String firstName, String lastName, String address, String clientId) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.adress = adress;
+        this.address = address;
         this.clientId = clientId; // Todo: auto id generation
     }
 
@@ -25,8 +24,8 @@ public class Client implements Serializable {
         return lastName;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
     public String getClientId() {
@@ -41,8 +40,8 @@ public class Client implements Serializable {
         lastName = newLastName;
     }
 
-    public void setAddress(String newAdressName) {
-        adress = newAdressName;
+    public void setAddress(String newAddressName) {
+        address = newAddressName;
     }
 
     public void setClientId(String newClientId) {
@@ -54,7 +53,7 @@ public class Client implements Serializable {
     }
 
     public String toString() {
-        String string = "Client id: " + clientId + " Client name: " + firstName + " " + lastName + " Client adress: " + adress;
+        String string = "Client id: " + clientId + " Client name: " + firstName + " " + lastName + " Client address: " + address;
         return string;
     }
 }
