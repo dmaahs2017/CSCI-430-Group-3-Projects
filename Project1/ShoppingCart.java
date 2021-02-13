@@ -3,18 +3,15 @@ import java.io.*;
 public class ShoppingCart implements Serializable {
   private static final long serialVersionUID = 1L;
   private List<Product> cart;
-  private double totalPrice;
 
   public ShoppingCart() {
     cart = new LinkedList<Product>();
-    totalPrice = 0;
   }
 
   // insert product(s) into the shopping cart and update total price
   public boolean insertProductToCart(Product product, int quantity) {
     product.setQuantity(quantity);
     cart.add(product);
-    totalPrice += (product.getSalePrice() * quantity);
     return true;
   }
   public Iterator<Product> getShoppingCartProducts() {
@@ -22,6 +19,14 @@ public class ShoppingCart implements Serializable {
   }
 
   public double getTotalPrice() {
+    double totalPrice = 0;
+    Iterator<Product> cartIterator = cart.iterator();
+
+    while (cartIterator.hasNext()){
+      Product p = cartIterator.next();
+      totalPrice += (p.getSalePrice() * p.getQuantity());
+    }
+    
     return totalPrice;
   }
   
