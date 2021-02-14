@@ -50,6 +50,10 @@ public class Product implements Serializable {
 	supplyPrice = newSupplyPrice;
   }
 
+  public Boolean equals(String id) {
+    return this.id.equals(id);
+  }
+
   public String toString() {
       return "id " + id + " name " + name + " quantity " + quantity + " salePrice " + salePrice + " supplyPrice " + supplyPrice;
   }
