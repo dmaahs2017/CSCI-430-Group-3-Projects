@@ -22,6 +22,10 @@ public class Supplier implements Serializable {
     return id;
   }
 
+  public Boolean equals(String id) {
+    return this.id.equals(id);
+  }
+
   public String toString() {
       return "Name " + name + " id " + id;
   }

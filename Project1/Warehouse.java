@@ -37,9 +37,9 @@ public class Warehouse {
         Iterator<Product> products = ProductList.instance().getProducts();
 
         Product p = null;
-        while (products.hasNext() || p != null) {
+        while (products.hasNext() && p == null) {
             Product tmp = products.next();
-            if ( tmp.getId() == id ) {
+            if ( tmp.equals(id)) {
                 p = tmp;
             }
         }
@@ -70,9 +70,9 @@ public class Warehouse {
         Iterator<Client> clients = ClientList.instance().getClients();
 
         Client p = null;
-        while (clients.hasNext() || p != null) {
+        while (clients.hasNext() && p == null) {
             Client tmp = clients.next();
-            if ( tmp.getClientId() == id ) {
+            if ( tmp.equals(id) ) {
                 p = tmp;
             }
         }
@@ -113,9 +113,9 @@ public class Warehouse {
         Iterator<Supplier> suppliers = SupplierList.instance().getSuppliers();
 
         Supplier s = null;
-        while (suppliers.hasNext() || s != null) {
+        while (suppliers.hasNext() && s == null) {
             Supplier tmp = suppliers.next();
-            if ( tmp.getId() == id ) {
+            if ( tmp.equals(id)) {
                 s = tmp;
             }
         }
