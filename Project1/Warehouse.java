@@ -170,4 +170,21 @@ public class Warehouse {
         client.setShoppingCart(new ShoppingCart());;
         return true;
     }
+
+    // place order and empty client's shopping cart
+    public Boolean placeOrder(String orderId, String clientId) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return false;
+        }
+        Order order = new Order(orderId, client);
+        OrderList.instance().insertOrder(order);
+        emptyCart(client.getClientId());
+        return true;
+    }
+
+    // get iterator for OrderList
+    public Iterator<Order> getOrders() {
+        return OrderList.instance().getOrders();
+      }
 }

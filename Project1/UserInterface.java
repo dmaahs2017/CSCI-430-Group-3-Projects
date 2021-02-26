@@ -17,7 +17,9 @@ public class UserInterface {
   private static final int DISPLAY_CART = 9;
   private static final int ADD_TO_CART = 10;
   private static final int EMPTY_CART = 11;
-  private static final int HELP = 12;
+  private static final int PLACE_ORDER = 12;
+  private static final int SHOW_ORDERS = 13;
+  private static final int HELP = 14;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -105,6 +107,8 @@ public class UserInterface {
     System.out.println(DISPLAY_CART + " to display all products in a client's shopping cart");
     System.out.println(ADD_TO_CART + " to add products to a client's shopping cart");
     System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
+    System.out.println(PLACE_ORDER + " to place an order");
+    System.out.println(SHOW_ORDERS + " to display all orders");
     System.out.println(HELP + " for help");
   }
 
@@ -298,6 +302,45 @@ public class UserInterface {
     }
   }
 
+  public void placeOrder() {
+    Client client;
+
+    String clientId = getToken("Enter client id to place an order");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {
+      System.out.println("Client found:");
+      System.out.println(client);
+      
+      //ensure the cart is not empty
+      Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+      if (cartIterator.hasNext()) {
+        if(yesOrNo("Are you sure you wish to place an order?")) {
+          String orderId = getToken("Enter the new order id");
+          if(warehouse.placeOrder(orderId, clientId)) {
+            System.out.println("Order placed and shopping cart has been emptied");
+          } else {
+            System.out.println("Unable to place order");
+          }
+          } else {
+            System.out.println("Canceled, order was not placed");
+          }
+        } else {
+          System.out.println("Shopping cart is empty, unable to place order");
+        }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void showOrders() {
+    Iterator<Order> allOrders = warehouse.getOrders();
+
+    while (allOrders.hasNext()){
+      Order order = allOrders.next();
+      System.out.println(order.toString());
+    }
+  }
+
   public void process() {
     int command;
     help();
@@ -335,6 +378,12 @@ public class UserInterface {
           break;
         case EMPTY_CART:
           emptyCart();
+          break;
+        case PLACE_ORDER:
+          placeOrder();
+          break;
+        case SHOW_ORDERS:
+          showOrders();
           break;
         case HELP:
           help();
