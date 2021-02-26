@@ -8,12 +8,14 @@ public class Client implements Serializable {
     private String firstName;
     private String lastName;
     private String address;
+    private ShoppingCart shoppingCart;
 
     public Client (String firstName, String lastName, String address, String clientId) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.clientId = clientId; // Todo: auto id generation
+        shoppingCart = new ShoppingCart();
     }
 
     public String getFirstName() {
@@ -32,6 +34,10 @@ public class Client implements Serializable {
         return clientId;
     }
 
+    public ShoppingCart getShoppingCart() {
+        return shoppingCart;
+    }
+
     public void setFirstName(String newFirstName) {
         firstName = newFirstName;
     }
@@ -46,6 +52,10 @@ public class Client implements Serializable {
 
     public void setClientId(String newClientId) {
         clientId = newClientId;
+    }
+
+    public void setShoppingCart(ShoppingCart cart) {
+        shoppingCart = cart;
     }
 
     public boolean equals(String id) {

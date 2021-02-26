@@ -137,4 +137,37 @@ public class Warehouse {
         return true;
 
     }
+
+    // display a client's shopping cart
+    public Boolean displayCart(String clientId) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return false;
+        }
+        Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+        while (cartIterator.hasNext()){
+            System.out.println(cartIterator.next());
+         }
+        return true;
+    }
+
+    // add product to a client's shopping cart
+    public Boolean addToCart(String clientId, Product product, int quantity) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return false;
+        }
+        client.getShoppingCart().insertProductToCart(product, quantity);
+        return true;
+    }
+
+    // empty a client's shopping cart
+    public Boolean emptyCart(String clientId) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return false;
+        }
+        client.setShoppingCart(new ShoppingCart());;
+        return true;
+    }
 }
