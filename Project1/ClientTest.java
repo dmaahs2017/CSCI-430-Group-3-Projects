@@ -25,5 +25,36 @@ public class ClientTest {
         System.out.println("client address should be court yard name and city : " + c1.getAddress());
 
         System.out.println(list.toString());
+
+        // shopping cart test
+        System.out.println("Client Shopping Cart Test:");
+
+        Product p1 = new Product("12345", "product1", 1, 1.00, .50);
+        Product p2 = new Product("77777", "product2", 1, 4.99, 2.49);
+        
+        System.out.println("Test Products:");
+        System.out.println(p1.toString());
+        System.out.println(p2.toString());
+
+        System.out.println("'2 of product1' to be added to " + c1.getFirstName() + " " + c1.getLastName() + "'s shopping cart:");
+        System.out.println("'5 of product2' to be added to " + c2.getFirstName() + " " + c2.getLastName() + "'s shopping cart:");
+        c1.getShoppingCart().insertProductToCart(p1, 2);
+        c2.getShoppingCart().insertProductToCart(p2, 5);
+
+        // print c1's shopping cart contents
+        System.out.println(c1.getShoppingCart().toString());
+
+        System.out.println(c1.getFirstName() + " " + c1.getLastName() + "'s Shopping Cart contents:");
+        Iterator<Product> cart1Iterator = c1.getShoppingCart().getShoppingCartProducts();
+        while (cart1Iterator.hasNext()) {
+            System.out.println(cart1Iterator.next());
+        }
+
+        // print c1's shopping cart contents
+        System.out.println(c2.getFirstName() + " " + c2.getLastName() + "'s Shopping Cart contents:");
+        Iterator<Product> cart2Iterator = c2.getShoppingCart().getShoppingCartProducts();
+        while (cart2Iterator.hasNext()) {
+            System.out.println(cart2Iterator.next());
+        }
     }
 }

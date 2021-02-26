@@ -8,12 +8,13 @@ public class ShoppingCart implements Serializable {
     cart = new LinkedList<Product>();
   }
 
-  // insert product(s) into the shopping cart and update total price
+  // insert a product into the shopping cart and the quantity
   public boolean insertProductToCart(Product product, int quantity) {
     product.setQuantity(quantity);
     cart.add(product);
     return true;
   }
+  
   public Iterator<Product> getShoppingCartProducts() {
     return cart.iterator();
   }

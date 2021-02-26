@@ -1,5 +1,4 @@
 import java.util.*;
-import java.text.*;
 import java.io.*;
 public class UserInterface {
   private static UserInterface userInterface;
@@ -15,7 +14,10 @@ public class UserInterface {
   private static final int SHOW_CLIENTS = 6;
   private static final int SHOW_SUPPLIERS = 7;
   private static final int SHOW_PRODUCTS = 8;
-  private static final int HELP = 9;
+  private static final int DISPLAY_CART = 9;
+  private static final int ADD_TO_CART = 10;
+  private static final int EMPTY_CART = 11;
+  private static final int HELP = 12;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -97,9 +99,12 @@ public class UserInterface {
     System.out.println(ADD_SUPPLIER + " to add a supplier");
     System.out.println(ADD_PRODUCTS + " to add products");
     System.out.println(EDIT_PRODUCTS + " to edit products");
-    System.out.println(SHOW_CLIENTS + " to dislpay all clients");
-    System.out.println(SHOW_SUPPLIERS + " to dislpay all suppliers");
-    System.out.println(SHOW_PRODUCTS + " to dislpay all products");
+    System.out.println(SHOW_CLIENTS + " to display all clients");
+    System.out.println(SHOW_SUPPLIERS + " to display all suppliers");
+    System.out.println(SHOW_PRODUCTS + " to display all products");
+    System.out.println(DISPLAY_CART + " to display all products in a client's shopping cart");
+    System.out.println(ADD_TO_CART + " to add products to a client's shopping cart");
+    System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
     System.out.println(HELP + " for help");
   }
 
@@ -230,6 +235,69 @@ public class UserInterface {
       }
   }
 
+  public void addToCart() {
+    Client client;
+    Product product;
+
+    String clientId = getToken("Enter client id to add to their shopping cart");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {
+      System.out.println("Client found:");
+      System.out.println(client);
+      do {
+        String productId = getToken("Enter product id");
+        product = warehouse.getProductById(productId);
+        if(product != null) {
+          System.out.println("Product found:");
+          System.out.println(product);
+          int productQuantity = getInt("Enter enter quantity");
+          warehouse.addToCart(clientId, product, productQuantity);
+        } else {
+          System.out.println("Could not find that product id");
+        }
+        if (!yesOrNo("Add another product to the shopping cart?")) {
+          break;
+        }
+      } while (true);
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void displayCart() {
+    Client client;
+
+    String clientId = getToken("Enter client id to view to their shopping cart");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {
+      System.out.println("Client found:");
+      System.out.println(client);
+      System.out.println("Shopping Cart:");
+      warehouse.displayCart(clientId);
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void emptyCart() {
+    Client client;
+
+    String clientId = getToken("Enter client id to empty to their shopping cart");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {
+      System.out.println("Client found:");
+      System.out.println(client);
+      if(!yesOrNo("Are you sure you wish to empty the shopping cart?")) {
+        warehouse.emptyCart(clientId);
+        System.out.println("Shopping Cart has been emptied");
+      } else {
+        System.out.println("Canceled, shopping cart was not emptied");
+      }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
   public void process() {
     int command;
     help();
@@ -258,6 +326,15 @@ public class UserInterface {
           break;
         case SHOW_PRODUCTS:
           showProducts();
+          break;
+        case DISPLAY_CART:
+          displayCart();
+          break;
+        case ADD_TO_CART:
+          addToCart();
+          break;
+        case EMPTY_CART:
+          emptyCart();
           break;
         case HELP:
           help();
