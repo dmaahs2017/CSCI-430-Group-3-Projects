@@ -19,7 +19,8 @@ public class UserInterface {
   private static final int EMPTY_CART = 11;
   private static final int PLACE_ORDER = 12;
   private static final int SHOW_ORDERS = 13;
-  private static final int HELP = 14;
+  private static final int WAITLIST_ITEM = 14;
+  private static final int HELP = 15;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -124,6 +125,20 @@ public class UserInterface {
       System.out.println("Could not add member");
     }
     System.out.println(result);
+  }
+
+  public void waitlistItem() {
+      String clientId = getToken("Enter existing client id");
+      String productId = getToken("Enter exising product id");
+      int quantity = getInt("Enter quantity to waitlist");
+
+      boolean result = warehouse.waitlistItem(clientId, productId, quantity);
+      if ( result ) {
+          System.out.println("Successfully waitlisted items");
+      } else {
+          System.out.println("Could not waitlist item");
+
+      }
   }
 
   public void addSupplier() {
@@ -384,6 +399,9 @@ public class UserInterface {
           break;
         case SHOW_ORDERS:
           showOrders();
+          break;
+        case WAITLIST_ITEM:
+          waitlistItem();
           break;
         case HELP:
           help();

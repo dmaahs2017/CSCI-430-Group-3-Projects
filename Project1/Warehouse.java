@@ -187,4 +187,21 @@ public class Warehouse {
     public Iterator<Order> getOrders() {
         return OrderList.instance().getOrders();
       }
+
+    // waitlist an N number of a product
+    public Boolean waitlistItem(String clientId, String productId, int quantity) {
+        Client c = getClientById(clientId);
+        Product p = getProductById(productId);
+
+        // can't waitlist a nonexistent item
+        // Do not want to waitlist for quantity <= 0
+        if ( c == null || p == null || quantity <= 0 ) {
+            return false;
+        }
+
+        Waitlist waitlist = Waitlist.instance();
+        waitlist.insertWaitItem(c, p, quantity);
+
+        return true;
+    }
 }
