@@ -19,8 +19,9 @@ public class UserInterface {
   private static final int EMPTY_CART = 11;
   private static final int PLACE_ORDER = 12;
   private static final int SHOW_ORDERS = 13;
-  private static final int WAITLIST_ITEM = 14;
-  private static final int HELP = 15;
+  private static final int SHOW_INVOICES = 14;
+  private static final int WAITLIST_ITEM = 15;
+  private static final int HELP = 16;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -110,6 +111,8 @@ public class UserInterface {
     System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
     System.out.println(PLACE_ORDER + " to place an order");
     System.out.println(SHOW_ORDERS + " to display all orders");
+    System.out.println(SHOW_INVOICES + " to display all invoices");
+    System.out.println(WAITLIST_ITEM + " to add to the waitlist");
     System.out.println(HELP + " for help");
   }
 
@@ -328,7 +331,7 @@ public class UserInterface {
       if (cartIterator.hasNext()) {
         if(yesOrNo("Are you sure you wish to place an order?")) {
           if(warehouse.placeOrder(clientId)) {
-            System.out.println("Order placed and shopping cart has been emptied");
+            System.out.println("Order placed, invoice generated, and shopping cart has been emptied");
           } else {
             System.out.println("Unable to place order");
           }
@@ -349,6 +352,15 @@ public class UserInterface {
     while (allOrders.hasNext()){
       Order order = allOrders.next();
       System.out.println(order.toString());
+    }
+  }
+
+  public void showInvoices() {
+    Iterator<Invoice> allInvoices = warehouse.getInvoices();
+
+    while (allInvoices.hasNext()){
+      Invoice invoice = allInvoices.next();
+      System.out.println(invoice.toString());
     }
   }
 
@@ -395,6 +407,9 @@ public class UserInterface {
           break;
         case SHOW_ORDERS:
           showOrders();
+          break;
+        case SHOW_INVOICES:
+          showInvoices();
           break;
         case WAITLIST_ITEM:
           waitlistItem();
