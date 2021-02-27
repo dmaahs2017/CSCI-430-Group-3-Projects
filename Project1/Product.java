@@ -4,12 +4,13 @@ public class Product implements Serializable {
   private static final long serialVersionUID = 1L;
   private String id;
   private String name;
+  private static final String PRODUCT_STRING = "P";
   private int quantity;
   private double salePrice;
   private double supplyPrice;
 
-  public Product(String id, String name, int quantity, double salePrice, double supplyPrice) {
-    this.id = id;
+  public Product(String name, int quantity, double salePrice, double supplyPrice) {
+    id = PRODUCT_STRING + (ProductIdServer.instance()).getId();
     this.name = name;
     this.quantity = quantity;
 	this.salePrice = salePrice;

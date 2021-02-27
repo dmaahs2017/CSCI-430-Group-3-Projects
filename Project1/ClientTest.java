@@ -3,15 +3,15 @@ import java.util.*;
 public class ClientTest {
 
     public static void main(String[] s) {
-        Client c1 = new Client("jkb", "lrnz", "street name and other things", "lol45");
-        Client c2 = new Client("Oscar", "Kilo", "rd name and some things", "ok91");
+        Client c1 = new Client("jkb", "lrnz", "street name and other things");
+        Client c2 = new Client("Oscar", "Kilo", "rd name and some things");
         ClientList list = ClientList.instance();
         list.insertClient(c1);
         list.insertClient(c2);
 
         Iterator<Client> clients = list.getClients();
         while (clients.hasNext()) {
-            System.out.println(clients.next());
+            System.out.println(clients.next()); // test id autogen
         }
 
         c1.setClientId("test007");
@@ -31,7 +31,7 @@ public class ClientTest {
 
         Product p1 = new Product("12345", "product1", 1, 1.00, .50);
         Product p2 = new Product("77777", "product2", 1, 4.99, 2.49);
-        
+
         System.out.println("Test Products:");
         System.out.println(p1.toString());
         System.out.println(p2.toString());

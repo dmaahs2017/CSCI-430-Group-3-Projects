@@ -8,13 +8,14 @@ public class Client implements Serializable {
     private String firstName;
     private String lastName;
     private String address;
+    private static final String CLIENT_STRING = "C"; // easy way to distinguish diffrent class ids
     private ShoppingCart shoppingCart;
 
-    public Client (String firstName, String lastName, String address, String clientId) {
+    public Client (String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
-        this.clientId = clientId; // Todo: auto id generation
+        clientId = CLIENT_STRING + (ClientIdServer.instance()).getId();
         shoppingCart = new ShoppingCart();
     }
 
