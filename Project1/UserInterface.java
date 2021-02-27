@@ -21,7 +21,8 @@ public class UserInterface {
   private static final int SHOW_ORDERS = 13;
   private static final int SHOW_INVOICES = 14;
   private static final int WAITLIST_ITEM = 15;
-  private static final int HELP = 16;
+  private static final int SHOW_WAITLIST = 16;
+  private static final int HELP = 17;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -113,6 +114,7 @@ public class UserInterface {
     System.out.println(SHOW_ORDERS + " to display all orders");
     System.out.println(SHOW_INVOICES + " to display all invoices");
     System.out.println(WAITLIST_ITEM + " to add to the waitlist");
+    System.out.println(SHOW_WAITLIST + " to display the waitlist");
     System.out.println(HELP + " for help");
   }
 
@@ -141,6 +143,15 @@ public class UserInterface {
           System.out.println("Could not waitlist item");
 
       }
+  }
+
+  public void showWaitlist() {
+    Iterator<WaitItem> waitlist = warehouse.getWaitlist();
+
+    while (waitlist.hasNext()){
+      WaitItem item = waitlist.next();
+      System.out.println(item.toString());
+    }
   }
 
   public void addSupplier() {
@@ -413,6 +424,9 @@ public class UserInterface {
           break;
         case WAITLIST_ITEM:
           waitlistItem();
+          break;
+        case SHOW_WAITLIST:
+          showWaitlist();
           break;
         case HELP:
           help();

@@ -206,6 +206,11 @@ public class Warehouse {
 
         return true;
     }
+
+    // get iterator for Waitlist
+    public Iterator<WaitItem> getWaitlist() {
+        return Waitlist.instance().waitlist();
+    }
     
     // get iterator for InvoiceList
     public Iterator<Invoice> getInvoices() {
