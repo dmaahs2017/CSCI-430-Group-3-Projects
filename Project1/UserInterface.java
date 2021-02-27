@@ -312,8 +312,7 @@ public class UserInterface {
       Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
       if (cartIterator.hasNext()) {
         if(yesOrNo("Are you sure you wish to place an order?")) {
-          String orderId = getToken("Enter the new order id");
-          if(warehouse.placeOrder(orderId, clientId)) {
+          if(warehouse.placeOrder(clientId)) {
             System.out.println("Order placed and shopping cart has been emptied");
           } else {
             System.out.println("Unable to place order");

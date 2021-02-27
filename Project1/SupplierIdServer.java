@@ -1,9 +1,10 @@
 import java.io.*;
 public class SupplierIdServer implements Serializable {
+  private static final long serialVersionUID = 1L;
   private  int idCounter;
   private static SupplierIdServer server;
   private SupplierIdServer() {
-    idCounter = 1;
+    idCounter = 0;
   }
   public static SupplierIdServer instance() {
     if (server == null) {
