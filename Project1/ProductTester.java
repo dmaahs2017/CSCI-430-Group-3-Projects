@@ -2,8 +2,8 @@ import java.util.*;
 public class ProductTester {
   
   public static void main(String[] s) {
-     Product p1 = new Product("123", "product1", 3, 1.99, 0.99); //String id, String name, int quantity, double salePrice, double supplyPrice
-     Product p2 = new Product("456", "product2", 1, 4.99, 2.50);
+     Product p1 = new Product("product1", 3, 1.99, 0.99); //String id, String name, int quantity, double salePrice, double supplyPrice
+     Product p2 = new Product("product2", 1, 4.99, 2.50);
      ProductList productList = ProductList.instance();
      productList.insertProduct(p1);
      productList.insertProduct(p2);

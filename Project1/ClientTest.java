@@ -29,8 +29,8 @@ public class ClientTest {
         // shopping cart test
         System.out.println("Client Shopping Cart Test:");
 
-        Product p1 = new Product("12345", "product1", 1, 1.00, .50);
-        Product p2 = new Product("77777", "product2", 1, 4.99, 2.49);
+        Product p1 = new Product("product1", 1, 1.00, .50);
+        Product p2 = new Product("product2", 1, 4.99, 2.49);
 
         System.out.println("Test Products:");
         System.out.println(p1.toString());

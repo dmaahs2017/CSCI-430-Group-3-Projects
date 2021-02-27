@@ -12,8 +12,9 @@ public class SupplierIdServer implements Serializable {
       return server;
     }
   }
-  public int getId() {
-    return idCounter++;
+  public String generateId() {
+    idCounter++;
+    return "s" + idCounter;
   }
   public String toString() {
     return ("IdServer" + idCounter);

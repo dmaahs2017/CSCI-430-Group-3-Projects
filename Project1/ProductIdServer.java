@@ -12,8 +12,9 @@ public class ProductIdServer implements Serializable {
       return server;
     }
   }
-  public int getId() {
-    return idCounter++;
+  public String generateId() {
+    idCounter++;
+    return "p" + idCounter;
   }
   public String toString() {
     return ("IdServer" + idCounter);

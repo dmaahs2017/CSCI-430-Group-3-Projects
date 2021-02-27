@@ -12,8 +12,9 @@ public class ClientIdServer implements Serializable {
       return server;
     }
   }
-  public int getId() {
-    return idCounter++;
+  public String generateId() {
+    idCounter++;
+    return "c" + idCounter;
   }
   public String toString() {
     return ("IdServer" + idCounter);
