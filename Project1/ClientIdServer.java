@@ -1,9 +1,10 @@
 import java.io.*;
 public class ClientIdServer implements Serializable {
+  private static final long serialVersionUID = 1L;
   private  int idCounter;
   private static ClientIdServer server;
   private ClientIdServer() {
-    idCounter = 1;
+    idCounter = 0;
   }
   public static ClientIdServer instance() {
     if (server == null) {
