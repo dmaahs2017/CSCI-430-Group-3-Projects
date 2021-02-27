@@ -10,11 +10,11 @@ public class Client implements Serializable {
     private String address;
     private ShoppingCart shoppingCart;
 
-    public Client (String firstName, String lastName, String address, String clientId) {
+    public Client (String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
-        this.clientId = clientId; // Todo: auto id generation
+        clientId = (ClientIdServer.instance()).generateId();
         shoppingCart = new ShoppingCart();
     }
 

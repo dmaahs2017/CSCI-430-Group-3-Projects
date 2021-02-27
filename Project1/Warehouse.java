@@ -11,8 +11,8 @@ public class Warehouse {
     }
 
     //add client
-    public Client addClient(String clientId, String fname, String lname, String address) {
-        Client client = new Client(fname, lname, address, clientId);
+    public Client addClient(String fname, String lname, String address) {
+        Client client = new Client(fname, lname, address);
 
         if (ClientList.instance().insertClient(client)) {
             return client;
@@ -22,8 +22,8 @@ public class Warehouse {
     }
 
     //add product
-    public Product addProduct(String id, String name, int quantity, double salePrice, double supplyPrice) {
-        Product product = new Product(id, name, quantity, salePrice, supplyPrice);
+    public Product addProduct(String name, int quantity, double salePrice, double supplyPrice) {
+        Product product = new Product(name, quantity, salePrice, supplyPrice);
 
         if (ProductList.instance().insertProduct(product)) {
             return product;
@@ -98,8 +98,8 @@ public class Warehouse {
     }
 
     //add supplier
-    public Supplier addSupplier(String name, String id) {
-        Supplier supplier = new Supplier(name, id);
+    public Supplier addSupplier(String name) {
+        Supplier supplier = new Supplier(name);
 
         if (SupplierList.instance().insertSupplier(supplier)) {
             return supplier;

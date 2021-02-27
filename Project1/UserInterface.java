@@ -113,12 +113,11 @@ public class UserInterface {
   }
 
   public void addClient() {
-    String id = getToken("Enter new client id");
     String firstName = getToken("Enter client's first name");
     String lastName = getToken("Enter client's last name");
     String address = getToken("Enter address");
 
-    Client result = warehouse.addClient(id, firstName, lastName, address);
+    Client result = warehouse.addClient(firstName, lastName, address);
 
     if (result == null) {
       System.out.println("Could not add member");
@@ -127,10 +126,9 @@ public class UserInterface {
   }
 
   public void addSupplier() {
-    String id = getToken("Enter new supplier id");
     String name = getToken("Enter supplier name");
 
-    Supplier result = warehouse.addSupplier(name, id);
+    Supplier result = warehouse.addSupplier(name);
 
     if (result == null) {
       System.out.println("Could not add member");
@@ -141,13 +139,12 @@ public class UserInterface {
   public void addProducts() {
     Product result;
     do {
-      String id = getToken("Enter id");
       String name = getToken("Enter name");
       int quantity = getInt("Enter quantity");
       double salePrice = getDouble("Enter Sale Price");
       double supplyPrice = getDouble("Enter Supply Price");
 
-      result = warehouse.addProduct(id, name, quantity, salePrice, supplyPrice);
+      result = warehouse.addProduct(name, quantity, salePrice, supplyPrice);
       if (result != null) {
         System.out.println(result);
       } else {

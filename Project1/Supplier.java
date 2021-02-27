@@ -5,9 +5,9 @@ public class Supplier implements Serializable {
   private String id;
 
 
-  public Supplier(String name, String id) {
+  public Supplier(String name) {
     this.name = name;
-    this.id = id;
+    id = (SupplierIdServer.instance()).generateId();
   }
 
   public String getName() {

@@ -8,8 +8,8 @@ public class Product implements Serializable {
   private double salePrice;
   private double supplyPrice;
 
-  public Product(String id, String name, int quantity, double salePrice, double supplyPrice) {
-    this.id = id;
+  public Product(String name, int quantity, double salePrice, double supplyPrice) {
+    id = (ProductIdServer.instance()).generateId();
     this.name = name;
     this.quantity = quantity;
 	this.salePrice = salePrice;
