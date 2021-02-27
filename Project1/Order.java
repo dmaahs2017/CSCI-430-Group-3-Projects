@@ -6,8 +6,8 @@ public class Order implements Serializable {
   private String orderId;
   private ShoppingCart orderedCart;  
 
-  public Order(String orderId, Client client) {
-    this.orderId = orderId;
+  public Order(Client client) {
+    this.orderId = (OrderIdServer.instance()).generateId();
     this.client = client;
     this.orderedCart = client.getShoppingCart();
   }

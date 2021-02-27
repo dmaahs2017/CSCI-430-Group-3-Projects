@@ -16,9 +16,9 @@ public class OrderTester {
       System.out.println(cartIterator.next());
     }
 
-    Order order = new Order("order1", c1);
+    Order order = new Order(c1);
 
-    System.out.println("New order should have orderId = order1, clientId = client1, and ordered_products should include product1, product2");
+    System.out.println("New order should have a generated orderId and client id, and ordered_products should include product1, product2");
     System.out.println("New order:");
     System.out.println(order.toString());
   }

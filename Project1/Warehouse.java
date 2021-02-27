@@ -172,12 +172,12 @@ public class Warehouse {
     }
 
     // place order and empty client's shopping cart
-    public Boolean placeOrder(String orderId, String clientId) {
+    public Boolean placeOrder(String clientId) {
         Client client = this.getClientById(clientId);
         if ( client == null ) {
             return false;
         }
-        Order order = new Order(orderId, client);
+        Order order = new Order(client);
         OrderList.instance().insertOrder(order);
         emptyCart(client.getClientId());
         return true;
