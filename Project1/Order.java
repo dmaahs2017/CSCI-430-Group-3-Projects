@@ -20,6 +20,14 @@ public class Order implements Serializable {
     return client;
   }
 
+  public String getOrderId() {
+    return orderId;
+  }
+
+  public ShoppingCart getOrderedCart() {
+    return orderedCart;
+  }
+
   public Boolean equals(String id) {
     return this.orderId.equals(id);
   }

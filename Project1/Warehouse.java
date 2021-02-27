@@ -178,7 +178,9 @@ public class Warehouse {
             return false;
         }
         Order order = new Order(client);
+        Invoice invoice = new Invoice(order);
         OrderList.instance().insertOrder(order);
+        InvoiceList.instance().insertInvoice(invoice);
         emptyCart(client.getClientId());
         return true;
     }
@@ -186,7 +188,7 @@ public class Warehouse {
     // get iterator for OrderList
     public Iterator<Order> getOrders() {
         return OrderList.instance().getOrders();
-      }
+    }
 
     // waitlist an N number of a product
     public Boolean waitlistItem(String clientId, String productId, int quantity) {
@@ -203,5 +205,40 @@ public class Warehouse {
         waitlist.insertWaitItem(c, p, quantity);
 
         return true;
+    }
+    
+    // get iterator for InvoiceList
+    public Iterator<Invoice> getInvoices() {
+        return InvoiceList.instance().getInvoices();
+    }
+
+    //get order by id
+    public Order getOrderById(String id) {
+        Iterator<Order> orders = OrderList.instance().getOrders();
+
+        Order o = null;
+        while (orders.hasNext() && o == null) {
+            Order tmp = orders.next();
+            if ( tmp.equals(id)) {
+                o = tmp;
+            }
+        }
+
+        return o;
+    }
+
+    //get invoice by id
+    public Invoice getInvoiceById(String id) {
+        Iterator<Invoice> invoices = InvoiceList.instance().getInvoices();
+
+        Invoice i = null;
+        while (invoices.hasNext() && i == null) {
+            Invoice tmp = invoices.next();
+            if ( tmp.equals(id)) {
+                i = tmp;
+            }
+        }
+
+        return i;
     }
 }
