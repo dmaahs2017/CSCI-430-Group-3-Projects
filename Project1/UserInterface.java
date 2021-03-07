@@ -22,7 +22,8 @@ public class UserInterface {
   private static final int SHOW_INVOICES = 14;
   private static final int WAITLIST_ITEM = 15;
   private static final int SHOW_WAITLIST = 16;
-  private static final int HELP = 17;
+  private static final int SHOW_BALANCE = 17;
+  private static final int HELP = 18;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -34,6 +35,29 @@ public class UserInterface {
     } else {
       return userInterface;
     }
+  }
+
+  public void help() {
+    System.out.println("Enter a number between " + EXIT + " and " + HELP + " as explained below:");
+    System.out.println(EXIT + " to Exit\n");
+    System.out.println(ADD_CLIENT + " to add a client");
+    System.out.println(EDIT_CLIENT + " to edit a client");
+    System.out.println(ADD_SUPPLIER + " to add a supplier");
+    System.out.println(ADD_PRODUCTS + " to add products");
+    System.out.println(EDIT_PRODUCTS + " to edit products");
+    System.out.println(SHOW_CLIENTS + " to display all clients");
+    System.out.println(SHOW_SUPPLIERS + " to display all suppliers");
+    System.out.println(SHOW_PRODUCTS + " to display all products");
+    System.out.println(DISPLAY_CART + " to display all products in a client's shopping cart");
+    System.out.println(ADD_TO_CART + " to add products to a client's shopping cart");
+    System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
+    System.out.println(PLACE_ORDER + " to place an order");
+    System.out.println(SHOW_ORDERS + " to display all orders");
+    System.out.println(SHOW_INVOICES + " to display all invoices");
+    System.out.println(WAITLIST_ITEM + " to add to the waitlist");
+    System.out.println(SHOW_WAITLIST + " to display the waitlist");
+    System.out.println(SHOW_BALANCE + " to display a client's balance");
+    System.out.println(HELP + " for help");
   }
 
   public String getToken(String prompt) {
@@ -94,28 +118,6 @@ public class UserInterface {
         System.out.println("Enter a number");
       }
     } while (true);
-  }
-
-  public void help() {
-    System.out.println("Enter a number between " + EXIT + " and " + HELP + " as explained below:");
-    System.out.println(EXIT + " to Exit\n");
-    System.out.println(ADD_CLIENT + " to add a client");
-    System.out.println(EDIT_CLIENT + " to edit a client");
-    System.out.println(ADD_SUPPLIER + " to add a supplier");
-    System.out.println(ADD_PRODUCTS + " to add products");
-    System.out.println(EDIT_PRODUCTS + " to edit products");
-    System.out.println(SHOW_CLIENTS + " to display all clients");
-    System.out.println(SHOW_SUPPLIERS + " to display all suppliers");
-    System.out.println(SHOW_PRODUCTS + " to display all products");
-    System.out.println(DISPLAY_CART + " to display all products in a client's shopping cart");
-    System.out.println(ADD_TO_CART + " to add products to a client's shopping cart");
-    System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
-    System.out.println(PLACE_ORDER + " to place an order");
-    System.out.println(SHOW_ORDERS + " to display all orders");
-    System.out.println(SHOW_INVOICES + " to display all invoices");
-    System.out.println(WAITLIST_ITEM + " to add to the waitlist");
-    System.out.println(SHOW_WAITLIST + " to display the waitlist");
-    System.out.println(HELP + " for help");
   }
 
   public void addClient() {
@@ -340,9 +342,11 @@ public class UserInterface {
       //ensure the cart is not empty
       Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
       if (cartIterator.hasNext()) {
+        System.out.println("Shopping Cart Total: $" + client.getShoppingCart().getTotalPrice());
         if(yesOrNo("Are you sure you wish to place an order?")) {
           if(warehouse.placeOrder(clientId)) {
-            System.out.println("Order placed, invoice generated, and shopping cart has been emptied");
+            System.out.println("Order placed, total price charged to client's balance,");
+            System.out.println("invoice generated, and shopping cart has been emptied.");
           } else {
             System.out.println("Unable to place order");
           }
@@ -352,6 +356,18 @@ public class UserInterface {
         } else {
           System.out.println("Shopping cart is empty, unable to place order");
         }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void showBalance() {
+    Client result;
+    String id = getToken("Enter client id to see balance");
+
+    result = warehouse.getClientById(id);
+    if (result != null) {
+      System.out.println("Current Balance: $" + result.getBalance());
     } else {
       System.out.println("Could not find that client id");
     }
@@ -427,6 +443,9 @@ public class UserInterface {
           break;
         case SHOW_WAITLIST:
           showWaitlist();
+          break;
+        case SHOW_BALANCE:
+          showBalance();
           break;
         case HELP:
           help();
