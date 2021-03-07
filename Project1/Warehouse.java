@@ -177,6 +177,7 @@ public class Warehouse {
         if ( client == null ) {
             return false;
         }
+        client.subtractBalance(client.getShoppingCart().getTotalPrice());
         Order order = new Order(client);
         Invoice invoice = new Invoice(order);
         OrderList.instance().insertOrder(order);

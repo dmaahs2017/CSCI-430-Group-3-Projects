@@ -25,7 +25,11 @@ public class ClientTest {
         System.out.println("client address should be court yard name and city : " + c1.getAddress());
 
         System.out.println(list.toString());
-
+        
+        // set and show balance
+        c1.setBalance(101.01);
+        System.out.println("client's balance should be 101.01 : " + c1.getBalance());
+        
         // shopping cart test
         System.out.println("Client Shopping Cart Test:");
 
@@ -50,7 +54,7 @@ public class ClientTest {
             System.out.println(cart1Iterator.next());
         }
 
-        // print c1's shopping cart contents
+        // print c2's shopping cart contents
         System.out.println(c2.getFirstName() + " " + c2.getLastName() + "'s Shopping Cart contents:");
         Iterator<Product> cart2Iterator = c2.getShoppingCart().getShoppingCartProducts();
         while (cart2Iterator.hasNext()) {
