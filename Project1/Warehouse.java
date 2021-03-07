@@ -247,4 +247,14 @@ public class Warehouse {
 
         return i;
     }
+
+    // add product to inventory
+    public Boolean addToInventory(String productId, int quantity) {
+        Product product = this.getProductById(productId);
+        if ( product == null ) {
+            return false;
+        }
+        Inventory.instance().addToInventory(product, quantity);
+        return true;
+    }
 }
