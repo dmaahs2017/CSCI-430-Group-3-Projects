@@ -8,6 +8,7 @@ public class Client implements Serializable {
     private String firstName;
     private String lastName;
     private String address;
+    private double balance;
     private ShoppingCart shoppingCart;
 
     public Client (String firstName, String lastName, String address) {
@@ -16,6 +17,7 @@ public class Client implements Serializable {
         this.address = address;
         clientId = (ClientIdServer.instance()).generateId();
         shoppingCart = new ShoppingCart();
+        balance = 0;
     }
 
     public String getFirstName() {
@@ -32,6 +34,10 @@ public class Client implements Serializable {
 
     public String getClientId() {
         return clientId;
+    }
+
+    public double getBalance() {
+        return balance;
     }
 
     public ShoppingCart getShoppingCart() {
@@ -56,6 +62,18 @@ public class Client implements Serializable {
 
     public void setShoppingCart(ShoppingCart cart) {
         shoppingCart = cart;
+    }
+
+    public void setBalance(double newBalance) {
+        balance = newBalance;
+    }
+
+    public void addBalance(double bal) {
+        balance += bal;
+    }
+
+    public void subtractBalance(double bal) {
+        balance -= bal;
     }
 
     public boolean equals(String id) {
