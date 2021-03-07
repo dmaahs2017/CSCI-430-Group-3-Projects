@@ -1,4 +1,8 @@
 # This is the directory for project's Code
 
-## Link to Google Docs for project 1
-TODO: Add Link
+## Group Members: Logan Krick, Jakob Lorenz, Dalton Maahs
+#
+## Instructions for compiling and running
+1. Navigate to the project directory.
+2. Compile the java files using 'javac *.java'.
+3. Run the program using 'java UserInterface'.
