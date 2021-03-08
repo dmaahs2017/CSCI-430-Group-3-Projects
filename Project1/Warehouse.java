@@ -34,11 +34,6 @@ public class Warehouse implements Serializable {
 
     public static Warehouse instance() {
         if (warehouse == null) {
-            // ClientIdServer.instance();
-            // InvoiceIdServer.instance();
-            // OrderIdServer.instance();
-            // ProductIdServer.instance();
-            // SupplierIdServer.instance();
             return warehouse = new Warehouse();
         } else {
             return warehouse;
@@ -50,11 +45,6 @@ public class Warehouse implements Serializable {
           FileInputStream file = new FileInputStream("WarehouseData");
           ObjectInputStream input = new ObjectInputStream(file);
           input.readObject();
-        //   ClientIdServer.retrieve(input);
-        //   InvoiceIdServer.retrieve(input);
-        //   OrderIdServer.retrieve(input);
-        //   ProductIdServer.retrieve(input);
-        //   SupplierIdServer.retrieve(input);
           input.close();
           return warehouse;
         } catch(IOException ioe) {
@@ -139,6 +129,21 @@ public class Warehouse implements Serializable {
         Product p = null;
         while (products.hasNext() && p == null) {
             Product tmp = products.next();
+            if ( tmp.equals(id)) {
+                p = tmp;
+            }
+        }
+
+        return p;
+    }
+
+    //get product from inventory by id
+    public Product getInventoryProductById(String id) {
+        Iterator<Product> inventory = Inventory.instance().getInventory();
+
+        Product p = null;
+        while (inventory.hasNext() && p == null) {
+            Product tmp = inventory.next();
             if ( tmp.equals(id)) {
                 p = tmp;
             }
@@ -278,6 +283,26 @@ public class Warehouse implements Serializable {
             return false;
         }
 
+        Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+        while(cartIterator.hasNext()) {
+            String productId = cartIterator.next().getId();
+            Product p = getInventoryProductById(productId);
+            if(p != null) {
+                int quantityInStock = p.getQuantity();
+                int cartQuantity = cartIterator.next().getQuantity();
+                int newQuantityInStock = 0;
+                newQuantityInStock = quantityInStock - cartQuantity;
+                if(newQuantityInStock < 0) {
+                    int waitItemQuantity = newQuantityInStock * -1;
+                    waitlistItem(clientId, productId, waitItemQuantity);
+                    p.setQuantity(0);
+                } else {
+                    p.setQuantity(newQuantityInStock);
+                }
+            }
+        }
+
+
         Transaction transaction = new Transaction("Order Placed", client.getShoppingCart().getTotalPrice());
         client.getTransactionList().insertTransaction(transaction);
         Order order = new Order(client);
@@ -351,13 +376,52 @@ public class Warehouse implements Serializable {
         return i;
     }
 
+    //get total quantity of a waitlisted product by id
+    public int getWaitlistProductQuantity(String productId) {
+        int quantity = 0;
+        Product p = getProductById(productId);
+        Iterator<WaitItem> waitlistIterator = getWaitlist();
+
+        while (waitlistIterator.hasNext() && p != null) {
+            WaitItem item = waitlistIterator.next();
+            if(p.equals(item.getProduct().getId()) && !item.getOrderFilled()) {
+                quantity += item.getQuantity();
+            }
+        }
+
+        return quantity;
+    }
+
+    //get a list of items on the waitlist with the mathcing productId
+    public List<WaitItem> getWaitItemsByProductId(String id) {
+        List<WaitItem> foundItemsList = new LinkedList<WaitItem>();
+        Iterator<WaitItem> waitlist = Waitlist.instance().waitlist();
+
+        Product p = getProductById(id);
+        while (waitlist.hasNext() && p != null) {
+            WaitItem item = waitlist.next();
+            if(p.equals(item.getProduct().getId()) && !item.getOrderFilled()) {
+                foundItemsList.add(item);
+            }
+        }
+
+        return foundItemsList;
+    }
+
     // add product to inventory
     public Boolean addToInventory(String productId, int quantity) {
         Product product = this.getProductById(productId);
         if ( product == null ) {
             return false;
         }
-        Inventory.instance().addToInventory(product, quantity);
+        Product inventoryProduct = getInventoryProductById(productId);
+        if(inventoryProduct == null) {
+            Inventory.instance().addToInventory(product, quantity);
+        } else {
+            int currentQuantity = inventoryProduct.getQuantity();
+            int newQuantity = currentQuantity += quantity;
+            inventoryProduct.setQuantity(newQuantity);
+        }
         return true;
     }
 
@@ -381,4 +445,18 @@ public class Warehouse implements Serializable {
         }
         return client.getTransactionList().getTransactions();
     }
+
+    public Iterator<Product> getInventory() {
+        return Inventory.instance().getInventory();
+    }
+
+    public Boolean addProductToInventory(String id, int quantity) {
+        Product p = getProductById(id);
+        if(p == null) {
+            return false;
+        }
+        Inventory.instance().addToInventory(p, quantity);
+        return true;
+    }
+    
 }

@@ -31,6 +31,8 @@ public class UserInterface {
     MAKE_PAYMENT,
     SHOW_TRANSACTIONS,
     EDIT_SHOPPING_CART,
+    SHOW_INVENTORY,
+    RECEIVE_SHIPMENT,
     SAVE,
     HELP,
   }
@@ -76,6 +78,8 @@ public class UserInterface {
     System.out.println(Actions.SHOW_OUTSTANDING.ordinal() + " to display all oustanding balances");
     System.out.println(Actions.SHOW_PRODUCTS_WAITLIST.ordinal() + " to display products, stock, and waitlist amt");
     System.out.println(Actions.EDIT_SHOPPING_CART.ordinal() + " to edit the shopping cart");
+    System.out.println(Actions.SHOW_INVENTORY.ordinal() + " to view the warehouse's inventory");
+    System.out.println(Actions.RECEIVE_SHIPMENT.ordinal() + " to receive a shipment");
     System.out.println(Actions.SAVE.ordinal() + " to save the current state of the warehouse");
     System.out.println(Actions.HELP.ordinal() + " for help");
   }
@@ -542,8 +546,48 @@ public class UserInterface {
         p.setQuantity(newQuantity);
         done = !yesOrNo("Would you like to edit more items in your cart?");
       }
-
     }
+  }
+  public void showInventory() {
+    Iterator<Product> inventoryIterator = warehouse.getInventory();
+    while (inventoryIterator.hasNext()){
+      System.out.println(inventoryIterator.next().toString());
+    }
+  }
+
+  public void recieveShipment() {
+    Product p;
+    do {
+      String productId = getToken("Enter productId");
+      p = warehouse.getProductById(productId);
+      if(p != null) {
+        int quantity = getInt("Enter quantity");
+
+        //check for waitlisted orders
+        List<WaitItem> waitlistedOrders = warehouse.getWaitItemsByProductId(productId);
+        Iterator<WaitItem> waitlistedOrdersIterator = waitlistedOrders.iterator();
+
+        while(waitlistedOrdersIterator.hasNext()) {
+          WaitItem waitItem = waitlistedOrdersIterator.next();
+          System.out.println("Waitlisted Order found for provided product:");
+          System.out.println(waitItem.toString());
+          if(yesOrNo("Fill waitlisted order?")) {
+            quantity -= waitItem.getQuantity();
+            waitItem.setOrderFilled(true);
+            System.out.println("Order filled.");
+          } else {
+            System.out.println("Order was not filled.");
+          }
+        }
+        // add remaining product to inventory
+        warehouse.addToInventory(productId, quantity);
+      } else {
+        System.out.println("Product not found");
+      }
+      if (!yesOrNo("Receive another product?")) {
+        break;
+      }
+    } while(true);
   }
 
   public void process() {
@@ -613,6 +657,12 @@ public class UserInterface {
           break;
         case SHOW_TRANSACTIONS:
           showTransactions();
+          break;
+        case SHOW_INVENTORY:
+          showInventory();
+          break;
+        case RECEIVE_SHIPMENT:
+          recieveShipment();
           break;
         case SAVE:
           save();
