@@ -23,7 +23,9 @@ public class UserInterface {
   private static final int WAITLIST_ITEM = 15;
   private static final int SHOW_WAITLIST = 16;
   private static final int SHOW_BALANCE = 17;
-  private static final int HELP = 18;
+  private static final int MAKE_PAYMENT = 18;
+  private static final int SHOW_TRANSACTIONS = 19;
+  private static final int HELP = 20;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -57,6 +59,8 @@ public class UserInterface {
     System.out.println(WAITLIST_ITEM + " to add to the waitlist");
     System.out.println(SHOW_WAITLIST + " to display the waitlist");
     System.out.println(SHOW_BALANCE + " to display a client's balance");
+    System.out.println(MAKE_PAYMENT + " to add to a client's balance");
+    System.out.println(SHOW_TRANSACTIONS + " to display a list of a client's transactions");
     System.out.println(HELP + " for help");
   }
 
@@ -391,6 +395,36 @@ public class UserInterface {
     }
   }
 
+  public void processPayment() {
+    Client client;
+
+    String clientId = getToken("Enter client id to make a payment");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {      
+      Double paymentAmount = getDouble("Enter payment amount");
+      if(warehouse.makePayment(clientId, paymentAmount)) {
+        System.out.println("Payment Successful, new balance: " + client.getBalance());
+      }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void showTransactions() {
+    Client client;
+    String clientId = getToken("Enter client id to see transactions");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {
+      System.out.println("Transaction List: ");
+      Iterator<Transaction> transactions = warehouse.getTransactions(clientId);
+      while (transactions.hasNext()){
+        System.out.println(transactions.next().toString());
+    }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+}
+
   public void process() {
     int command;
     help();
@@ -446,6 +480,12 @@ public class UserInterface {
           break;
         case SHOW_BALANCE:
           showBalance();
+          break;
+        case MAKE_PAYMENT:
+          processPayment();
+          break;
+        case SHOW_TRANSACTIONS:
+          showTransactions();
           break;
         case HELP:
           help();

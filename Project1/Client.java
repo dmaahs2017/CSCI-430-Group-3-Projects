@@ -10,14 +10,17 @@ public class Client implements Serializable {
     private String address;
     private double balance;
     private ShoppingCart shoppingCart;
+    private TransactionList transactionList;
 
     public Client (String firstName, String lastName, String address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         clientId = (ClientIdServer.instance()).generateId();
-        shoppingCart = new ShoppingCart();
         balance = 0;
+        shoppingCart = new ShoppingCart();
+        transactionList = new TransactionList();
+        
     }
 
     public String getFirstName() {
@@ -42,6 +45,10 @@ public class Client implements Serializable {
 
     public ShoppingCart getShoppingCart() {
         return shoppingCart;
+    }
+
+    public TransactionList getTransactionList() {
+        return transactionList;
     }
 
     public void setFirstName(String newFirstName) {

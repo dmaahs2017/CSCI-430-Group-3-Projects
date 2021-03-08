@@ -177,11 +177,14 @@ public class Warehouse {
         if ( client == null ) {
             return false;
         }
-        client.subtractBalance(client.getShoppingCart().getTotalPrice());
+
+        Transaction transaction = new Transaction("Order Placed", client.getShoppingCart().getTotalPrice());
+        client.getTransactionList().insertTransaction(transaction);
         Order order = new Order(client);
         Invoice invoice = new Invoice(order);
         OrderList.instance().insertOrder(order);
         InvoiceList.instance().insertInvoice(invoice);
+        client.subtractBalance(client.getShoppingCart().getTotalPrice());
         emptyCart(client.getClientId());
         return true;
     }
@@ -256,5 +259,26 @@ public class Warehouse {
         }
         Inventory.instance().addToInventory(product, quantity);
         return true;
+    }
+
+    // make payment
+    public Boolean makePayment(String clientId, double amount) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return false;
+        }
+        client.addBalance(amount);
+        Transaction transaction = new Transaction("Payment Made", amount);
+        client.getTransactionList().insertTransaction(transaction);
+        return true;
+    }
+
+    // get a client's transactions
+    public Iterator<Transaction> getTransactions(String clientId) {
+        Client client = this.getClientById(clientId);
+        if ( client == null ) {
+            return null;
+        }
+        return client.getTransactionList().getTransactions();
     }
 }
