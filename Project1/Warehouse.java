@@ -1,14 +1,114 @@
 import java.util.*;
-public class Warehouse {
+import java.io.*;
+
+public class Warehouse implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static Warehouse warehouse;
+    private ClientList clientList;
+    private Inventory inventory;
+    private InvoiceList invoiceList;
+    private OrderList orderList;
+    private ProductList productList;
+    private SupplierList supplierList;
+    private Waitlist waitlist;
+    private ClientIdServer clientIdServer;
+    private InvoiceIdServer invoiceIdServer;
+    private OrderIdServer orderIdServer;
+    private ProductIdServer productIdServer;
+    private SupplierIdServer supplierIdServer;
+
+    private Warehouse() {
+        clientList = ClientList.instance();
+        inventory = Inventory.instance();
+        invoiceList = InvoiceList.instance();
+        orderList = OrderList.instance();
+        productList = ProductList.instance();
+        supplierList = SupplierList.instance();
+        waitlist = Waitlist.instance();
+        clientIdServer = ClientIdServer.instance();
+        invoiceIdServer = InvoiceIdServer.instance();
+        orderIdServer = OrderIdServer.instance();
+        productIdServer = ProductIdServer.instance();
+        supplierIdServer = SupplierIdServer.instance();
+    }
 
     public static Warehouse instance() {
         if (warehouse == null) {
+            // ClientIdServer.instance();
+            // InvoiceIdServer.instance();
+            // OrderIdServer.instance();
+            // ProductIdServer.instance();
+            // SupplierIdServer.instance();
             return warehouse = new Warehouse();
         } else {
             return warehouse;
         }
     }
+
+    public static Warehouse retrieve() {
+        try {
+          FileInputStream file = new FileInputStream("WarehouseData");
+          ObjectInputStream input = new ObjectInputStream(file);
+          input.readObject();
+        //   ClientIdServer.retrieve(input);
+        //   InvoiceIdServer.retrieve(input);
+        //   OrderIdServer.retrieve(input);
+        //   ProductIdServer.retrieve(input);
+        //   SupplierIdServer.retrieve(input);
+          input.close();
+          return warehouse;
+        } catch(IOException ioe) {
+          ioe.printStackTrace();
+          return null;
+        } catch(ClassNotFoundException cnfe) {
+          cnfe.printStackTrace();
+          return null;
+        }
+      }
+      public static  boolean save() {
+        try {
+          FileOutputStream file = new FileOutputStream("WarehouseData");
+          ObjectOutputStream output = new ObjectOutputStream(file);
+          output.writeObject(Warehouse.instance());
+          output.writeObject(ClientIdServer.instance());
+          output.writeObject(InvoiceIdServer.instance());
+          output.writeObject(InvoiceList.instance());
+          output.writeObject(OrderIdServer.instance());
+          output.writeObject(OrderList.instance());
+          output.writeObject(ProductIdServer.instance());
+          output.writeObject(ProductList.instance());
+          output.writeObject(SupplierIdServer.instance());
+          output.writeObject(SupplierList.instance());
+          output.writeObject(Waitlist.instance());
+          output.close();
+          return true;
+        } catch(IOException ioe) {
+          ioe.printStackTrace();
+          return false;
+        }
+      }
+      private void writeObject(java.io.ObjectOutputStream output) {
+        try {
+          output.defaultWriteObject();
+          output.writeObject(warehouse);
+        } catch(IOException ioe) {
+          System.out.println(ioe);
+        }
+      }
+      private void readObject(java.io.ObjectInputStream input) {
+        try {
+          input.defaultReadObject();
+          if (warehouse == null) {
+            warehouse = (Warehouse) input.readObject();
+          } else {
+            input.readObject();
+          }
+        } catch(IOException ioe) {
+          ioe.printStackTrace();
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
 
     //add client
     public Client addClient(String fname, String lname, String address) {

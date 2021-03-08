@@ -25,10 +25,15 @@ public class UserInterface {
   private static final int SHOW_BALANCE = 17;
   private static final int MAKE_PAYMENT = 18;
   private static final int SHOW_TRANSACTIONS = 19;
-  private static final int HELP = 20;
+  private static final int SAVE = 20;
+  private static final int HELP = 21;
 
   private UserInterface() {
-    warehouse = Warehouse.instance();
+    if (yesOrNo("Look for saved data and  use it?")) {
+      retrieve();
+    } else {
+      warehouse = Warehouse.instance();
+    }
   }
 
   public static UserInterface instance() {
@@ -61,7 +66,31 @@ public class UserInterface {
     System.out.println(SHOW_BALANCE + " to display a client's balance");
     System.out.println(MAKE_PAYMENT + " to add to a client's balance");
     System.out.println(SHOW_TRANSACTIONS + " to display a list of a client's transactions");
+    System.out.println(SAVE + " to save the current state of the warehouse");
     System.out.println(HELP + " for help");
+  }
+
+  private void save() {
+    if (warehouse.save()) {
+      System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
+    } else {
+      System.out.println(" There has been an error in saving \n" );
+    }
+  }
+
+  private void retrieve() {
+    try {
+      Warehouse tempWarehouse = Warehouse.retrieve();
+      if (tempWarehouse != null) {
+        System.out.println(" The warehouse has been successfully retrieved from the file WarehouseData \n" );
+        warehouse = tempWarehouse;
+      } else {
+        System.out.println("File doesnt exist; creating new warehouse" );
+        warehouse = Warehouse.instance();
+      }
+    } catch(Exception cnfe) {
+      cnfe.printStackTrace();
+    }
   }
 
   public String getToken(String prompt) {
@@ -486,6 +515,9 @@ public class UserInterface {
           break;
         case SHOW_TRANSACTIONS:
           showTransactions();
+          break;
+        case SAVE:
+          save();
           break;
         case HELP:
           help();
