@@ -46,17 +46,15 @@ public class ClientTest {
         c2.getShoppingCart().insertProductToCart(p2, 5);
 
         // print c1's shopping cart contents
-        System.out.println(c1.getShoppingCart().toString());
-
         System.out.println(c1.getFirstName() + " " + c1.getLastName() + "'s Shopping Cart contents:");
-        Iterator<Product> cart1Iterator = c1.getShoppingCart().getShoppingCartProducts();
+        Iterator<ShoppingCartItem> cart1Iterator = c1.getShoppingCart().getShoppingCartProducts();
         while (cart1Iterator.hasNext()) {
             System.out.println(cart1Iterator.next());
         }
 
         // print c2's shopping cart contents
         System.out.println(c2.getFirstName() + " " + c2.getLastName() + "'s Shopping Cart contents:");
-        Iterator<Product> cart2Iterator = c2.getShoppingCart().getShoppingCartProducts();
+        Iterator<ShoppingCartItem> cart2Iterator = c2.getShoppingCart().getShoppingCartProducts();
         while (cart2Iterator.hasNext()) {
             System.out.println(cart2Iterator.next());
         }

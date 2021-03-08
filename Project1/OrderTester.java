@@ -9,7 +9,7 @@ public class OrderTester {
     c1.getShoppingCart().insertProductToCart(p1, 1);
     c1.getShoppingCart().insertProductToCart(p2, 3);
 
-    Iterator<Product> cartIterator = c1.getShoppingCart().getShoppingCartProducts();
+    Iterator<ShoppingCartItem> cartIterator = c1.getShoppingCart().getShoppingCartProducts();
     System.out.println("Client's shopping cart should contain '1 of product1' and '3 of product2'");
     System.out.println("Client's shopping cart:");
     while (cartIterator.hasNext()){

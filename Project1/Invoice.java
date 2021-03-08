@@ -13,7 +13,7 @@ public class Invoice implements Serializable {
     this.totalPrice = invoicedOrder.getOrderedCart().getTotalPrice();
   }
   
-  public Iterator<Product> getInvoiceProducts() {
+  public Iterator<ShoppingCartItem> getInvoiceProducts() {
     return invoiceCart.getShoppingCartProducts();
   }
 

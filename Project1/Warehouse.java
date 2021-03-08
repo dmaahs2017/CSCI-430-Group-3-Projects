@@ -137,19 +137,19 @@ public class Warehouse implements Serializable {
         return p;
     }
 
-    //get product from inventory by id
-    public Product getInventoryProductById(String id) {
-        Iterator<Product> inventory = Inventory.instance().getInventory();
+    //get item in inventory by id
+    public InventoryItem getInventoryItemById(String id) {
+        Iterator<InventoryItem> inventory = Inventory.instance().getInventory();
 
-        Product p = null;
-        while (inventory.hasNext() && p == null) {
-            Product tmp = inventory.next();
+        InventoryItem item = null;
+        while (inventory.hasNext() && item == null) {
+            InventoryItem tmp = inventory.next();
             if ( tmp.equals(id)) {
-                p = tmp;
+                item = tmp;
             }
         }
 
-        return p;
+        return item;
     }
 
     public Iterator<Product> getProducts() {
@@ -249,7 +249,7 @@ public class Warehouse implements Serializable {
         if ( client == null ) {
             return false;
         }
-        Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+        Iterator<ShoppingCartItem> cartIterator = client.getShoppingCart().getShoppingCartProducts();
         while (cartIterator.hasNext()){
             System.out.println(cartIterator.next());
          }
@@ -283,21 +283,23 @@ public class Warehouse implements Serializable {
             return false;
         }
 
-        Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+        Iterator<ShoppingCartItem> cartIterator = client.getShoppingCart().getShoppingCartProducts();
         while(cartIterator.hasNext()) {
-            String productId = cartIterator.next().getId();
-            Product p = getInventoryProductById(productId);
-            if(p != null) {
-                int quantityInStock = p.getQuantity();
-                int cartQuantity = cartIterator.next().getQuantity();
+            ShoppingCartItem cartItem = cartIterator.next();
+            String productId = cartItem.getProduct().getId();
+            InventoryItem inventoryItem = getInventoryItemById(productId);
+            
+            if(inventoryItem != null) {
+                int quantityInStock = inventoryItem.getQuantity();
+                int cartQuantity = cartItem.getQuantity();
                 int newQuantityInStock = 0;
                 newQuantityInStock = quantityInStock - cartQuantity;
                 if(newQuantityInStock < 0) {
                     int waitItemQuantity = newQuantityInStock * -1;
                     waitlistItem(clientId, productId, waitItemQuantity);
-                    p.setQuantity(0);
+                    inventoryItem.setQuantity(0);
                 } else {
-                    p.setQuantity(newQuantityInStock);
+                    inventoryItem.setQuantity(newQuantityInStock);
                 }
             }
         }
@@ -414,13 +416,13 @@ public class Warehouse implements Serializable {
         if ( product == null ) {
             return false;
         }
-        Product inventoryProduct = getInventoryProductById(productId);
-        if(inventoryProduct == null) {
+        InventoryItem item = getInventoryItemById(productId);
+        if(item == null) {
             Inventory.instance().addToInventory(product, quantity);
         } else {
-            int currentQuantity = inventoryProduct.getQuantity();
+            int currentQuantity = item.getQuantity();
             int newQuantity = currentQuantity += quantity;
-            inventoryProduct.setQuantity(newQuantity);
+            item.setQuantity(newQuantity);
         }
         return true;
     }
@@ -446,7 +448,7 @@ public class Warehouse implements Serializable {
         return client.getTransactionList().getTransactions();
     }
 
-    public Iterator<Product> getInventory() {
+    public Iterator<InventoryItem> getInventory() {
         return Inventory.instance().getInventory();
     }
 
