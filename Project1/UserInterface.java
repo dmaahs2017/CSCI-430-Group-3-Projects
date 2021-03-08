@@ -492,7 +492,7 @@ public class UserInterface {
       }
 
       if ( p == null ) {
-        done = !yesOrNo("That ID was not found in the shoping cart? Contiue?");
+        done = !yesOrNo("That ID was not found in the shoping cart? Continue?");
       } else {
         int newQuantity = getInt("Enter the desired amount to put in your shopping cart.");
         p.setQuantity(newQuantity);
