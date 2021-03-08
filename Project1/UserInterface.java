@@ -23,7 +23,9 @@ public class UserInterface {
   private static final int WAITLIST_ITEM = 15;
   private static final int SHOW_WAITLIST = 16;
   private static final int SHOW_BALANCE = 17;
-  private static final int HELP = 18;
+  private static final int SHOW_OUTSTANDING = 18;
+  private static final int SHOW_PRODUCTS_WAITLIST = 19;
+  private static final int HELP = 20;
 
   private UserInterface() {
     warehouse = Warehouse.instance();
@@ -57,6 +59,8 @@ public class UserInterface {
     System.out.println(WAITLIST_ITEM + " to add to the waitlist");
     System.out.println(SHOW_WAITLIST + " to display the waitlist");
     System.out.println(SHOW_BALANCE + " to display a client's balance");
+    System.out.println(SHOW_OUTSTANDING + " to display all oustanding balances");
+    System.out.println(SHOW_PRODUCTS_WAITLIST + " to display products, stock, and waitlist amt");
     System.out.println(HELP + " for help");
   }
 
@@ -391,6 +395,36 @@ public class UserInterface {
     }
   }
 
+  public void showOutstanding() {
+    Iterator<Client> allClients = warehouse.getClients();
+    while (allClients.hasNext()){
+      Client temp = allClients.next();
+      if (temp.getBalance() < 0){
+         System.out.println(temp.toString());
+      }
+    }
+  }
+
+  public void showProductsWaitlist() {
+    int amt = 0;
+    Iterator<Product> allProducts = warehouse.getProducts();
+    while(allProducts.hasNext()) {
+      Product tempProduct = allProducts.next();
+      Iterator<WaitItem> waitList = warehouse.getWaitlist();
+      while(waitList.hasNext()) {
+        WaitItem tempWaitItem = waitList.next();
+        if(tempProduct == tempWaitItem.getProduct()) {
+          amt += tempWaitItem.getQuantity();
+        }
+      }
+      System.out.println(tempProduct.toString() + " " + amt);
+      amt = 0;
+    }
+  }
+
+  public void showManufacturerAndPrice {
+    
+
   public void process() {
     int command;
     help();
@@ -446,6 +480,12 @@ public class UserInterface {
           break;
         case SHOW_BALANCE:
           showBalance();
+          break;
+        case SHOW_OUTSTANDING:
+          showOutstanding();
+          break;
+        case SHOW_PRODUCTS_WAITLIST:
+          showProductsWaitlist();
           break;
         case HELP:
           help();

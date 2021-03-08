@@ -1,4 +1,5 @@
 import java.util.*;
+
 public class Warehouse {
     private static Warehouse warehouse;
 
@@ -257,4 +258,5 @@ public class Warehouse {
         Inventory.instance().addToInventory(product, quantity);
         return true;
     }
+
 }
