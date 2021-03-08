@@ -464,7 +464,7 @@ public class UserInterface {
   }
 
   public void editShoppingCart() {
-    String clientId = getToken("Enter client id to see transactions");
+    String clientId = getToken("Enter client id to edit shopping cart");
     Client client = warehouse.getClientById(clientId);
     Boolean done = false;
     if (client == null) {
@@ -475,9 +475,9 @@ public class UserInterface {
 
     ShoppingCart cart = client.getShoppingCart();
     while (!done) {
-      System.out.println("Shoping Cart:");
+      System.out.println("Shopping Cart:");
       System.out.println(cart.toString());
-      String productId = getToken("Enter productId in cart to edit");
+      String productId = getToken("Enter Product ID in cart to edit");
       Iterator<Product> cartIter = cart.getShoppingCartProducts();
 
       
