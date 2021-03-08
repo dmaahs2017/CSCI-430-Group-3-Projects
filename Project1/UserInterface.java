@@ -1,35 +1,39 @@
 import java.util.*;
 import java.io.*;
+
+
 public class UserInterface {
   private static UserInterface userInterface;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static Warehouse warehouse;
 
-  private static final int EXIT = 0;
-  private static final int ADD_CLIENT = 1;
-  private static final int EDIT_CLIENT = 2;
-  private static final int ADD_SUPPLIER = 3;
-  private static final int ADD_PRODUCTS = 4;
-  private static final int EDIT_PRODUCTS = 5;
-  private static final int SHOW_CLIENTS = 6;
-  private static final int SHOW_SUPPLIERS = 7;
-  private static final int SHOW_PRODUCTS = 8;
-  private static final int DISPLAY_CART = 9;
-  private static final int ADD_TO_CART = 10;
-  private static final int EMPTY_CART = 11;
-  private static final int PLACE_ORDER = 12;
-  private static final int SHOW_ORDERS = 13;
-  private static final int SHOW_INVOICES = 14;
-  private static final int WAITLIST_ITEM = 15;
-  private static final int SHOW_WAITLIST = 16;
-  private static final int SHOW_BALANCE = 17;
-  private static final int SHOW_OUTSTANDING = 18;
-  private static final int SHOW_PRODUCTS_WAITLIST = 19;
-  private static final int HELP = 20;
-  private static final int MAKE_PAYMENT = 21;
-  private static final int SHOW_TRANSACTIONS = 22;
-  private static final int SAVE = 23;
-  private static final int HELP = 24;
+  enum Actions {
+    EXIT,
+    ADD_CLIENT,
+    EDIT_CLIENT,
+    ADD_SUPPLIER,
+    ADD_PRODUCTS,
+    EDIT_PRODUCTS,
+    SHOW_CLIENTS,
+    SHOW_SUPPLIERS,
+    SHOW_PRODUCTS,
+    DISPLAY_CART,
+    ADD_TO_CART,
+    EMPTY_CART,
+    PLACE_ORDER,
+    SHOW_ORDERS,
+    SHOW_INVOICES,
+    WAITLIST_ITEM,
+    SHOW_WAITLIST,
+    SHOW_BALANCE,
+    SHOW_OUTSTANDING,
+    SHOW_PRODUCTS_WAITLIST,
+    MAKE_PAYMENT,
+    SHOW_TRANSACTIONS,
+    EDIT_SHOPPING_CART,
+    SAVE,
+    HELP,
+  }
 
   private UserInterface() {
     if (yesOrNo("Look for saved data and  use it?")) {
@@ -48,31 +52,32 @@ public class UserInterface {
   }
 
   public void help() {
-    System.out.println("Enter a number between " + EXIT + " and " + HELP + " as explained below:");
-    System.out.println(EXIT + " to Exit\n");
-    System.out.println(ADD_CLIENT + " to add a client");
-    System.out.println(EDIT_CLIENT + " to edit a client");
-    System.out.println(ADD_SUPPLIER + " to add a supplier");
-    System.out.println(ADD_PRODUCTS + " to add products");
-    System.out.println(EDIT_PRODUCTS + " to edit products");
-    System.out.println(SHOW_CLIENTS + " to display all clients");
-    System.out.println(SHOW_SUPPLIERS + " to display all suppliers");
-    System.out.println(SHOW_PRODUCTS + " to display all products");
-    System.out.println(DISPLAY_CART + " to display all products in a client's shopping cart");
-    System.out.println(ADD_TO_CART + " to add products to a client's shopping cart");
-    System.out.println(EMPTY_CART + " to remove all products from a client's shopping cart");
-    System.out.println(PLACE_ORDER + " to place an order");
-    System.out.println(SHOW_ORDERS + " to display all orders");
-    System.out.println(SHOW_INVOICES + " to display all invoices");
-    System.out.println(WAITLIST_ITEM + " to add to the waitlist");
-    System.out.println(SHOW_WAITLIST + " to display the waitlist");
-    System.out.println(SHOW_BALANCE + " to display a client's balance");
-    System.out.println(SHOW_OUTSTANDING + " to display all oustanding balances");
-    System.out.println(SHOW_PRODUCTS_WAITLIST + " to display products, stock, and waitlist amt");
-    System.out.println(MAKE_PAYMENT + " to add to a client's balance");
-    System.out.println(SHOW_TRANSACTIONS + " to display a list of a client's transactions");
-    System.out.println(SAVE + " to save the current state of the warehouse");
-    System.out.println(HELP + " for help");
+    System.out.println("Enter a number between " + Actions.EXIT.ordinal() + " and " + Actions.HELP.ordinal() + " as explained below:");
+    System.out.println(Actions.EXIT.ordinal() + " to Exit\n");
+    System.out.println(Actions.ADD_CLIENT.ordinal() + " to add a client");
+    System.out.println(Actions.EDIT_CLIENT.ordinal() + " to edit a client");
+    System.out.println(Actions.ADD_SUPPLIER.ordinal() + " to add a supplier");
+    System.out.println(Actions.ADD_PRODUCTS.ordinal() + " to add products");
+    System.out.println(Actions.EDIT_PRODUCTS.ordinal() + " to edit products");
+    System.out.println(Actions.SHOW_CLIENTS.ordinal() + " to display all clients");
+    System.out.println(Actions.SHOW_SUPPLIERS.ordinal() + " to display all suppliers");
+    System.out.println(Actions.SHOW_PRODUCTS.ordinal() + " to display all products");
+    System.out.println(Actions.DISPLAY_CART.ordinal() + " to display all products in a client's shopping cart");
+    System.out.println(Actions.ADD_TO_CART.ordinal() + " to add products to a client's shopping cart");
+    System.out.println(Actions.EMPTY_CART.ordinal() + " to remove all products from a client's shopping cart");
+    System.out.println(Actions.PLACE_ORDER.ordinal() + " to place an order");
+    System.out.println(Actions.SHOW_ORDERS.ordinal() + " to display all orders");
+    System.out.println(Actions.SHOW_INVOICES.ordinal() + " to display all invoices");
+    System.out.println(Actions.WAITLIST_ITEM.ordinal() + " to add to the waitlist");
+    System.out.println(Actions.SHOW_WAITLIST.ordinal() + " to display the waitlist");
+    System.out.println(Actions.SHOW_BALANCE.ordinal() + " to display a client's balance");
+    System.out.println(Actions.MAKE_PAYMENT.ordinal() + " to add to a client's balance");
+    System.out.println(Actions.SHOW_TRANSACTIONS.ordinal() + " to display a list of a client's transactions");
+    System.out.println(Actions.SHOW_OUTSTANDING.ordinal() + " to display all oustanding balances");
+    System.out.println(Actions.SHOW_PRODUCTS_WAITLIST.ordinal() + " to display products, stock, and waitlist amt");
+    System.out.println(Actions.EDIT_SHOPPING_CART.ordinal() + " to edit the shopping cart");
+    System.out.println(Actions.SAVE.ordinal() + " to save the current state of the warehouse");
+    System.out.println(Actions.HELP.ordinal() + " for help");
   }
 
   private void save() {
@@ -145,12 +150,14 @@ public class UserInterface {
     } while (true);
   }
 
-  public int getCommand() {
+  public Actions getCommand() {
     do {
       try {
-        int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
-        if (value >= EXIT && value <= HELP) {
-          return value;
+        int value = Integer.parseInt(getToken("Enter command:" + Actions.HELP.ordinal() + " for help"));
+        for ( Actions action : Actions.values() ) {
+          if ( value == action.ordinal() ) {
+            return action;
+          }
         }
       } catch (NumberFormatException nfe) {
         System.out.println("Enter a number");
@@ -486,10 +493,49 @@ public class UserInterface {
     }
   }
 
+  public void editShoppingCart() {
+    String clientId = getToken("Enter client id to edit shopping cart");
+    Client client = warehouse.getClientById(clientId);
+    Boolean done = false;
+    if (client == null) {
+      System.out.println("Client does not exist");
+      return;
+    }
+
+
+    ShoppingCart cart = client.getShoppingCart();
+    while (!done) {
+      System.out.println("Shopping Cart:");
+      System.out.println(cart.toString());
+      String productId = getToken("Enter Product ID in cart to edit");
+      Iterator<Product> cartIter = cart.getShoppingCartProducts();
+
+      
+      // find the product in in the shopping cart
+      Product p = null;
+      while ( cartIter.hasNext() ) {
+        Product next = cartIter.next();
+        if (cartIter.next().getId() == productId) {
+          p = next;
+          break;
+        }
+      }
+
+      if ( p == null ) {
+        done = !yesOrNo("That ID was not found in the shoping cart? Continue?");
+      } else {
+        int newQuantity = getInt("Enter the desired amount to put in your shopping cart.");
+        p.setQuantity(newQuantity);
+        done = !yesOrNo("Would you like to edit more items in your cart?");
+      }
+
+    } 
+  }
+
   public void process() {
-    int command;
+    Actions command;
     help();
-    while ((command = getCommand()) != EXIT) {
+    while ((command = getCommand()) != Actions.EXIT) {
       switch (command) {
         case ADD_CLIENT:
           addClient();
@@ -556,6 +602,9 @@ public class UserInterface {
           break;
         case SAVE:
           save();
+          break;
+        case EDIT_SHOPPING_CART:
+          editShoppingCart();
           break;
         case HELP:
           help();
