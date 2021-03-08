@@ -28,6 +28,7 @@ public class UserInterface {
     SHOW_BALANCE,
     MAKE_PAYMENT,
     SHOW_TRANSACTIONS,
+    EDIT_SHOPPING_CART,
     SAVE,
     HELP,
   }
@@ -70,6 +71,7 @@ public class UserInterface {
     System.out.println(Actions.SHOW_BALANCE.ordinal() + " to display a client's balance");
     System.out.println(Actions.MAKE_PAYMENT.ordinal() + " to add to a client's balance");
     System.out.println(Actions.SHOW_TRANSACTIONS.ordinal() + " to display a list of a client's transactions");
+    System.out.println(Actions.EDIT_SHOPPING_CART.ordinal() + " to edit the shopping cart");
     System.out.println(Actions.SAVE.ordinal() + " to save the current state of the warehouse");
     System.out.println(Actions.HELP.ordinal() + " for help");
   }
@@ -460,7 +462,47 @@ public class UserInterface {
     } else {
       System.out.println("Could not find that client id");
     }
-}
+
+  }
+
+  public void editShoppingCart() {
+    String clientId = getToken("Enter client id to see transactions");
+    Client client = warehouse.getClientById(clientId);
+    Boolean done = false;
+    if (client == null) {
+      System.out.println("Client does not exist");
+      return;
+    }
+
+
+    ShoppingCart cart = client.getShoppingCart();
+    while (!done) {
+      System.out.println("Shoping Cart:");
+      System.out.println(cart.toString());
+      String productId = getToken("Enter productId in cart to edit");
+      Iterator<Product> cartIter = cart.getShoppingCartProducts();
+
+      
+      // find the product in in the shopping cart
+      Product p = null;
+      while ( cartIter.hasNext() ) {
+        Product next = cartIter.next();
+        if (cartIter.next().getId() == productId) {
+          p = next;
+          break;
+        }
+      }
+
+      if ( p == null ) {
+        done = !yesOrNo("That ID was not found in the shoping cart? Contiue?");
+      } else {
+        int newQuantity = getInt("Enter the desired amount to put in your shopping cart.");
+        p.setQuantity(newQuantity);
+        done = !yesOrNo("Would you like to edit more items in your cart?");
+      }
+
+    } 
+  }
 
   public void process() {
     Actions command;
@@ -526,6 +568,9 @@ public class UserInterface {
           break;
         case SAVE:
           save();
+          break;
+        case EDIT_SHOPPING_CART:
+          editShoppingCart();
           break;
         case HELP:
           help();
