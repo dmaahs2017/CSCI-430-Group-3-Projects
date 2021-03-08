@@ -436,6 +436,21 @@ public class UserInterface {
     }
   }
 
+  public void processPayment() {
+    Client client;
+
+    String clientId = getToken("Enter client id to make a payment");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {      
+      Double paymentAmount = getDouble("Enter payment amount");
+      if(warehouse.makePayment(clientId, paymentAmount)) {
+        System.out.println("Payment Successful, new balance: " + client.getBalance());
+      }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
   public void showOutstanding() {
     Iterator<Client> allClients = warehouse.getClients();
     while (allClients.hasNext()){
@@ -463,7 +478,7 @@ public class UserInterface {
     }
   }
 
-  public void showManufacturerAndPrice {
+  public void showManufacturerAndPrice() {
     Client client;
 
     String clientId = getToken("Enter client id to make a payment");
@@ -510,7 +525,6 @@ public class UserInterface {
       String productId = getToken("Enter Product ID in cart to edit");
       Iterator<Product> cartIter = cart.getShoppingCartProducts();
 
-      
       // find the product in in the shopping cart
       Product p = null;
       while ( cartIter.hasNext() ) {
@@ -529,7 +543,7 @@ public class UserInterface {
         done = !yesOrNo("Would you like to edit more items in your cart?");
       }
 
-    } 
+    }
   }
 
   public void process() {
