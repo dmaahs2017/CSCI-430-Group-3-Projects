@@ -26,6 +26,8 @@ public class UserInterface {
     WAITLIST_ITEM,
     SHOW_WAITLIST,
     SHOW_BALANCE,
+    SHOW_OUTSTANDING,
+    SHOW_PRODUCTS_WAITLIST,
     MAKE_PAYMENT,
     SHOW_TRANSACTIONS,
     EDIT_SHOPPING_CART,
@@ -71,6 +73,8 @@ public class UserInterface {
     System.out.println(Actions.SHOW_BALANCE.ordinal() + " to display a client's balance");
     System.out.println(Actions.MAKE_PAYMENT.ordinal() + " to add to a client's balance");
     System.out.println(Actions.SHOW_TRANSACTIONS.ordinal() + " to display a list of a client's transactions");
+    System.out.println(Actions.SHOW_OUTSTANDING.ordinal() + " to display all oustanding balances");
+    System.out.println(Actions.SHOW_PRODUCTS_WAITLIST.ordinal() + " to display products, stock, and waitlist amt");
     System.out.println(Actions.EDIT_SHOPPING_CART.ordinal() + " to edit the shopping cart");
     System.out.println(Actions.SAVE.ordinal() + " to save the current state of the warehouse");
     System.out.println(Actions.HELP.ordinal() + " for help");
@@ -447,6 +451,48 @@ public class UserInterface {
     }
   }
 
+  public void showOutstanding() {
+    Iterator<Client> allClients = warehouse.getClients();
+    while (allClients.hasNext()){
+      Client temp = allClients.next();
+      if (temp.getBalance() < 0){
+         System.out.println(temp.toString());
+      }
+    }
+  }
+
+  public void showProductsWaitlist() {
+    int amt = 0;
+    Iterator<Product> allProducts = warehouse.getProducts();
+    while(allProducts.hasNext()) {
+      Product tempProduct = allProducts.next();
+      Iterator<WaitItem> waitList = warehouse.getWaitlist();
+      while(waitList.hasNext()) {
+        WaitItem tempWaitItem = waitList.next();
+        if(tempProduct == tempWaitItem.getProduct()) {
+          amt += tempWaitItem.getQuantity();
+        }
+      }
+      System.out.println(tempProduct.toString() + " " + amt);
+      amt = 0;
+    }
+  }
+
+  public void showManufacturerAndPrice() {
+    Client client;
+
+    String clientId = getToken("Enter client id to make a payment");
+    client = warehouse.getClientById(clientId);
+    if (client != null) {      
+      Double paymentAmount = getDouble("Enter payment amount");
+      if(warehouse.makePayment(clientId, paymentAmount)) {
+        System.out.println("Payment Successful, new balance: " + client.getBalance());
+      }
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
   public void showTransactions() {
     Client client;
     String clientId = getToken("Enter client id to see transactions");
@@ -460,7 +506,6 @@ public class UserInterface {
     } else {
       System.out.println("Could not find that client id");
     }
-
   }
 
   public void editShoppingCart() {
@@ -480,7 +525,6 @@ public class UserInterface {
       String productId = getToken("Enter Product ID in cart to edit");
       Iterator<Product> cartIter = cart.getShoppingCartProducts();
 
-      
       // find the product in in the shopping cart
       Product p = null;
       while ( cartIter.hasNext() ) {
@@ -499,7 +543,7 @@ public class UserInterface {
         done = !yesOrNo("Would you like to edit more items in your cart?");
       }
 
-    } 
+    }
   }
 
   public void process() {
@@ -557,6 +601,12 @@ public class UserInterface {
           break;
         case SHOW_BALANCE:
           showBalance();
+          break;
+        case SHOW_OUTSTANDING:
+          showOutstanding();
+          break;
+        case SHOW_PRODUCTS_WAITLIST:
+          showProductsWaitlist();
           break;
         case MAKE_PAYMENT:
           processPayment();
