@@ -34,11 +34,6 @@ public class Warehouse implements Serializable {
 
     public static Warehouse instance() {
         if (warehouse == null) {
-            // ClientIdServer.instance();
-            // InvoiceIdServer.instance();
-            // OrderIdServer.instance();
-            // ProductIdServer.instance();
-            // SupplierIdServer.instance();
             return warehouse = new Warehouse();
         } else {
             return warehouse;
@@ -50,11 +45,6 @@ public class Warehouse implements Serializable {
           FileInputStream file = new FileInputStream("WarehouseData");
           ObjectInputStream input = new ObjectInputStream(file);
           input.readObject();
-        //   ClientIdServer.retrieve(input);
-        //   InvoiceIdServer.retrieve(input);
-        //   OrderIdServer.retrieve(input);
-        //   ProductIdServer.retrieve(input);
-        //   SupplierIdServer.retrieve(input);
           input.close();
           return warehouse;
         } catch(IOException ioe) {
