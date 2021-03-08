@@ -150,11 +150,9 @@ public class UserInterface {
     do {
       try {
         int value = Integer.parseInt(getToken("Enter command:" + Actions.HELP.ordinal() + " for help"));
-        if (value >= Actions.EXIT.ordinal() && value <= Actions.HELP.ordinal()) {
-          for ( Actions action : Actions.values() ) {
-            if ( value == action.ordinal() ) {
-              return action;
-            }
+        for ( Actions action : Actions.values() ) {
+          if ( value == action.ordinal() ) {
+            return action;
           }
         }
       } catch (NumberFormatException nfe) {
