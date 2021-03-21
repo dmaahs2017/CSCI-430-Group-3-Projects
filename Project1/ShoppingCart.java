@@ -2,30 +2,30 @@ import java.util.*;
 import java.io.*;
 public class ShoppingCart implements Serializable {
   private static final long serialVersionUID = 1L;
-  private List<Product> cart;
+  private List<ShoppingCartItem> cart;
 
   public ShoppingCart() {
-    cart = new LinkedList<Product>();
+    cart = new LinkedList<ShoppingCartItem>();
   }
 
   // insert a product into the shopping cart and the quantity
   public boolean insertProductToCart(Product product, int quantity) {
-    product.setQuantity(quantity);
-    cart.add(product);
+    ShoppingCartItem item = new ShoppingCartItem(product, quantity);
+    cart.add(item);
     return true;
   }
   
-  public Iterator<Product> getShoppingCartProducts() {
+  public Iterator<ShoppingCartItem> getShoppingCartProducts() {
     return cart.iterator();
   }
 
   public double getTotalPrice() {
     double totalPrice = 0;
-    Iterator<Product> cartIterator = cart.iterator();
+    Iterator<ShoppingCartItem> cartIterator = cart.iterator();
 
     while (cartIterator.hasNext()){
-      Product p = cartIterator.next();
-      totalPrice += (p.getSalePrice() * p.getQuantity());
+      ShoppingCartItem item = cartIterator.next();
+      totalPrice += (item.getProduct().getSalePrice() * item.getQuantity());
     }
     
     return totalPrice;

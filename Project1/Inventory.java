@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 public class Inventory implements Serializable {
   private static final long serialVersionUID = 1L;
-  private List<Product> inventoryList = new LinkedList<Product>();
+  private List<InventoryItem> inventoryList = new LinkedList<InventoryItem>();
   private static Inventory inventory;
   private Inventory() {
   }
@@ -15,12 +15,12 @@ public class Inventory implements Serializable {
   }
 
   public boolean addToInventory(Product product, int quantity) {
-    product.setQuantity(quantity);
-    inventoryList.add(product);
+    InventoryItem item = new InventoryItem(product, quantity);
+    inventoryList.add(item);
     return true;
   }
 
-  public Iterator<Product> getInventory(){
+  public Iterator<InventoryItem> getInventory(){
      return inventoryList.iterator();
   }
   

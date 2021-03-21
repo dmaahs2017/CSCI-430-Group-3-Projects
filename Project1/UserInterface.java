@@ -38,7 +38,7 @@ public class UserInterface {
   }
 
   private UserInterface() {
-    if (yesOrNo("Look for saved data and  use it?")) {
+    if (yesOrNo("Look for saved data and use it?")) {
       retrieve();
     } else {
       warehouse = Warehouse.instance();
@@ -389,7 +389,7 @@ public class UserInterface {
       System.out.println(client);
       
       //ensure the cart is not empty
-      Iterator<Product> cartIterator = client.getShoppingCart().getShoppingCartProducts();
+      Iterator<ShoppingCartItem> cartIterator = client.getShoppingCart().getShoppingCartProducts();
       if (cartIterator.hasNext()) {
         System.out.println("Shopping Cart Total: $" + client.getShoppingCart().getTotalPrice());
         if(yesOrNo("Are you sure you wish to place an order?")) {
@@ -527,29 +527,30 @@ public class UserInterface {
       System.out.println("Shopping Cart:");
       System.out.println(cart.toString());
       String productId = getToken("Enter Product ID in cart to edit");
-      Iterator<Product> cartIter = cart.getShoppingCartProducts();
+      Iterator<ShoppingCartItem> cartIter = cart.getShoppingCartProducts();
 
       // find the product in in the shopping cart
-      Product p = null;
+      ShoppingCartItem item = null;
       while ( cartIter.hasNext() ) {
-        Product next = cartIter.next();
-        if (cartIter.next().getId() == productId) {
-          p = next;
+        ShoppingCartItem next = cartIter.next();
+        if (cartIter.next().getProduct().getId() == productId) {
+          item = next;
           break;
         }
       }
 
-      if ( p == null ) {
+      if ( item == null ) {
         done = !yesOrNo("That ID was not found in the shoping cart? Continue?");
       } else {
         int newQuantity = getInt("Enter the desired amount to put in your shopping cart.");
-        p.setQuantity(newQuantity);
+
+        item.setQuantity(newQuantity);
         done = !yesOrNo("Would you like to edit more items in your cart?");
       }
     }
   }
   public void showInventory() {
-    Iterator<Product> inventoryIterator = warehouse.getInventory();
+    Iterator<InventoryItem> inventoryIterator = warehouse.getInventory();
     while (inventoryIterator.hasNext()){
       System.out.println(inventoryIterator.next().toString());
     }

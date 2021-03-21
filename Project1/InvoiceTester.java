@@ -4,9 +4,9 @@ public class InvoiceTester {
   public static void main(String[] s) {
     Client c1 = new Client("bob", "smith", "address");
     Client c2 = new Client("tom", "jerry", "address");
-    Product p1 = new Product("product1", 1, 1.99, 0.99);
-    Product p2 = new Product("product2", 1, 4.99, 2.50);
-    Product p3 = new Product("product3", 1, 5.00, 2.22);
+    Product p1 = new Product("product1", 1, 2, 0.99);
+    Product p2 = new Product("product2", 1, 5, 2.50);
+    Product p3 = new Product("product3", 1, 10, 2.22);
     
     c1.getShoppingCart().insertProductToCart(p1, 1);
     c1.getShoppingCart().insertProductToCart(p2, 3);

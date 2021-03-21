@@ -12,7 +12,7 @@ public class Order implements Serializable {
     this.orderedCart = client.getShoppingCart();
   }
 
-  public Iterator<Product> getOrderProducts() {
+  public Iterator<ShoppingCartItem> getOrderProducts() {
     return orderedCart.getShoppingCartProducts();
   }
 

@@ -8,7 +8,7 @@ public class ShoppingCartTester {
 
     // test empty shopping cart
     System.out.println("Shopping Cart Should be empty");
-    Iterator<Product> cartIterator = shoppingCart.getShoppingCartProducts();
+    Iterator<ShoppingCartItem> cartIterator = shoppingCart.getShoppingCartProducts();
     while (cartIterator.hasNext()){
       System.out.println(cartIterator.next());
     }
