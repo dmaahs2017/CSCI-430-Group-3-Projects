@@ -150,6 +150,16 @@ public class ClerkState extends WareState {
     } while(true);
   }
 
+  private void becomeClient() {
+    String user = InputUtils.getToken("Please input the client id: ");
+    if (Warehouse.instance().getClientById(user) != null){
+      (WareContext.instance()).setUser(user.toString());      
+      (WareContext.instance()).changeState(1);
+    } else {
+      System.out.println("Invalid client id.");
+    }
+  }
+
   public void process() {
     Operations command;
     help();
@@ -171,7 +181,7 @@ public class ClerkState extends WareState {
           showBalance();
           break;
         case BecomeClient:
-          //TODO(@Everyone). @Dalton is not sure how to implement this :).
+          becomeClient();
           break;
         case DisplayProductWaitlist:
           showProductsWaitlist();
