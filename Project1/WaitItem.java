@@ -1,4 +1,7 @@
-public class WaitItem {
+import java.io.Serializable;
+
+public class WaitItem implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Client client;
     private Product product;
     private int quantity;
