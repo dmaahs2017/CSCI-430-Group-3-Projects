@@ -2,6 +2,7 @@ import java.util.*;
 import java.text.*;
 import java.io.*;
 import backend.*;
+import utils.*;
 public class ClientState extends WareState {
   private static ClientState clientState;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -27,55 +28,11 @@ public class ClientState extends WareState {
       return clientState;
     }
   }
-  public String getToken(String prompt) {
-    do {
-      try {
-        System.out.println(prompt);
-        String line = reader.readLine();
-        StringTokenizer tokenizer = new StringTokenizer(line,"\n\r\f");
-        if (tokenizer.hasMoreTokens()) {
-          return tokenizer.nextToken();
-        }
-      } catch (IOException ioe) {
-        System.exit(0);
-      }
-    } while (true);
-  }
-  private boolean yesOrNo(String prompt) {
-    String more = getToken(prompt + " (Y|y)[es] or anything else for no");
-    if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
-      return false;
-    }
-    return true;
-  }
-  public int getNumber(String prompt) {
-    do {
-      try {
-        String item = getToken(prompt);
-        Integer num = Integer.valueOf(item);
-        return num.intValue();
-      } catch (NumberFormatException nfe) {
-        System.out.println("Please input a number ");
-      }
-    } while (true);
-  }
-  public Calendar getDate(String prompt) {
-    do {
-      try {
-        Calendar date = new GregorianCalendar();
-        String item = getToken(prompt);
-        DateFormat df = SimpleDateFormat.getDateInstance(DateFormat.SHORT);
-        date.setTime(df.parse(item));
-        return date;
-      } catch (Exception fe) {
-        System.out.println("Please input a date as mm/dd/yy");
-      }
-    } while (true);
-  }
+
   public int getCommand() {
     do {
       try {
-        int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
+        int value = Integer.parseInt(InputUtils.getToken("Enter command:" + HELP + " for help"));
         if (value >= EXIT && value <= HELP) {
           return value;
         }
@@ -165,17 +122,17 @@ public class ClientState extends WareState {
   public void addToCart() {
     String clientId = WareContext.instance().getUser();
     do {
-      String productId = getToken("Enter product id");
+      String productId = InputUtils.getToken("Enter product id");
       Product product = warehouse.getProductById(productId);
       if(product != null) {
         System.out.println("Product found:");
         System.out.println("id:" + product.getId() + ", name: " + product.getName() + ", Sale Price: $" + product.getSalePrice() + "\n");
-        int productQuantity = getNumber("Enter quantity");
+        int productQuantity = InputUtils.getNumber("Enter quantity");
         warehouse.addToCart(clientId, product, productQuantity);
       } else {
         System.out.println("Could not find that product id");
       }
-      if (!yesOrNo("Add another product to the shopping cart?")) {
+      if (!InputUtils.yesOrNo("Add another product to the shopping cart?")) {
         break;
       }
     } while (true);
@@ -189,7 +146,7 @@ public class ClientState extends WareState {
 
     while (!doneEditing) {
       viewCart();
-      String productId = getToken("Enter Product ID from cart to edit");
+      String productId = InputUtils.getToken("Enter Product ID from cart to edit");
 
       // find the product in the shopping cart
       ShoppingCartItem item = null;
@@ -203,12 +160,12 @@ public class ClientState extends WareState {
       }
 
       if ( item == null ) {
-        doneEditing = !yesOrNo("That ID was not found in the shoping cart? Continue?");
+        doneEditing = !InputUtils.yesOrNo("That ID was not found in the shoping cart? Continue?");
       } else {
-        int newQuantity = getNumber("Enter the desired amount to put in your shopping cart.");
+        int newQuantity = InputUtils.getNumber("Enter the desired amount to put in your shopping cart.");
 
         item.setQuantity(newQuantity);
-        doneEditing = !yesOrNo("Would you like to edit more items in your cart?");
+        doneEditing = !InputUtils.yesOrNo("Would you like to edit more items in your cart?");
       }
     }
   }
@@ -221,7 +178,7 @@ public class ClientState extends WareState {
     if (cartIterator.hasNext()) {
     viewCart();
     System.out.println("Shopping Cart Total: $" + client.getShoppingCart().getTotalPrice());
-      if(yesOrNo("Are you sure you wish to place an order?")) {
+      if(InputUtils.yesOrNo("Are you sure you wish to place an order?")) {
         if(warehouse.placeOrder(clientId)) {
           System.out.println("Order placed: total price charged to your balance,");
           System.out.println("shopping cart has been emptied, and invoice generated.");
