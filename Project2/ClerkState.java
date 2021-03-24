@@ -171,6 +171,7 @@ public class ClerkState extends WareState {
           showBalance();
           break;
         case BecomeClient:
+          //TODO(@Everyone). @Dalton is not sure how to implement this :).
           break;
         case DisplayProductWaitlist:
           showProductsWaitlist();
