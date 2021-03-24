@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.*;
 import backend.*;
+import utils.*;
 public class WareContext {
   
   private int currentState;
@@ -15,28 +16,6 @@ public class WareContext {
   private WareState[] states;
   private int[][] nextState;
 
-  public String getToken(String prompt) {
-    do {
-      try {
-        System.out.println(prompt);
-        String line = reader.readLine();
-        StringTokenizer tokenizer = new StringTokenizer(line,"\n\r\f");
-        if (tokenizer.hasMoreTokens()) {
-          return tokenizer.nextToken();
-        }
-      } catch (IOException ioe) {
-        System.exit(0);
-      }
-    } while (true);
-  }
-  
-  private boolean yesOrNo(String prompt) {
-    String more = getToken(prompt + " (Y|y)[es] or anything else for no");
-    if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
-      return false;
-    }
-    return true;
-  }
 
   private void retrieve() {
     try {
@@ -67,7 +46,7 @@ public class WareContext {
 
   private WareContext() { //constructor
     //System.out.println("In WareContext constructor");
-    if (yesOrNo("Look for saved data and  use it?")) {
+    if (InputUtils.yesOrNo("Look for saved data and  use it?")) {
       retrieve();
     } else {
       warehouse = Warehouse.instance();
@@ -103,7 +82,7 @@ public class WareContext {
 
   private void terminate()
   {
-   if (yesOrNo("Save data?")) {
+   if (InputUtils.yesOrNo("Save data?")) {
       if (warehouse.save()) {
          System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
        } else {

@@ -42,6 +42,7 @@ public class ClerkState extends WareState {
     } while (true);
   }
 
+
   public void help() {
     System.out.println("\nEnter a number between " + Operations.Exit + " and " + Operations.Help + " as explained below:");
     System.out.println(Operations.AddClient.ordinal() + "Add a new client");
@@ -54,6 +55,100 @@ public class ClerkState extends WareState {
     System.out.println(Operations.Exit.ordinal() + " to logout");
   }
 
+  public void addClient() {
+    String firstName = InputUtils.getToken("Enter client's first name");
+    String lastName = InputUtils.getToken("Enter client's last name");
+    String address = InputUtils.getToken("Enter address");
+
+    Client result = warehouse.addClient(firstName, lastName, address);
+
+    if (result == null) {
+      System.out.println("Could not add member");
+    }
+    System.out.println(result);
+  }
+
+  public void showProducts() {
+      Iterator<Product> allProducts = warehouse.getProducts();
+
+      while (allProducts.hasNext()){
+        Product product = allProducts.next();
+        System.out.println(product.toString());
+      }
+  }
+
+  public void showClients() {
+      Iterator<Client> allClients = warehouse.getClients();
+
+      while (allClients.hasNext()){
+        Client client = allClients.next();
+        System.out.println(client.toString());
+      }
+  }
+
+  public void showBalance() {
+    Client result;
+    String id = InputUtils.getToken("Enter client id to see balance");
+
+    result = warehouse.getClientById(id);
+    if (result != null) {
+      System.out.println("Current Balance: $" + result.getBalance());
+    } else {
+      System.out.println("Could not find that client id");
+    }
+  }
+
+  public void showProductsWaitlist() {
+    int amt = 0;
+    Iterator<Product> allProducts = warehouse.getProducts();
+    while(allProducts.hasNext()) {
+      Product tempProduct = allProducts.next();
+      Iterator<WaitItem> waitList = warehouse.getWaitlist();
+      while(waitList.hasNext()) {
+        WaitItem tempWaitItem = waitList.next();
+        if(tempProduct == tempWaitItem.getProduct()) {
+          amt += tempWaitItem.getQuantity();
+        }
+      }
+      System.out.println(tempProduct.toString() + " " + amt);
+      amt = 0;
+    }
+  }
+
+  public void recieveShipment() {
+    Product p;
+    do {
+      String productId = InputUtils.getToken("Enter productId");
+      p = warehouse.getProductById(productId);
+      if(p != null) {
+        int quantity = InputUtils.getNumber("Enter quantity");
+
+        //check for waitlisted orders
+        List<WaitItem> waitlistedOrders = warehouse.getWaitItemsByProductId(productId);
+        Iterator<WaitItem> waitlistedOrdersIterator = waitlistedOrders.iterator();
+
+        while(waitlistedOrdersIterator.hasNext()) {
+          WaitItem waitItem = waitlistedOrdersIterator.next();
+          System.out.println("Waitlisted Order found for provided product:");
+          System.out.println(waitItem.toString());
+          if(InputUtils.yesOrNo("Fill waitlisted order?")) {
+            quantity -= waitItem.getQuantity();
+            waitItem.setOrderFilled(true);
+            System.out.println("Order filled.");
+          } else {
+            System.out.println("Order was not filled.");
+          }
+        }
+        // add remaining product to inventory
+        warehouse.addToInventory(productId, quantity);
+      } else {
+        System.out.println("Product not found");
+      }
+      if (!InputUtils.yesOrNo("Receive another product?")) {
+        break;
+      }
+    } while(true);
+  }
 
   public void process() {
     Operations command;
@@ -64,19 +159,25 @@ public class ClerkState extends WareState {
           help();
           break;
         case AddClient:
-            break;
+          addClient();
+          break;
         case ShowProducts:
-            break;
+          showProducts();
+          break;
         case ShowClients:
-            break;
+          showClients();
+          break;
         case ShowClientsWithOutstandingBalance:
-            break;
+          showBalance();
+          break;
         case BecomeClient:
-            break;
+          break;
         case DisplayProductWaitlist:
-            break;
+          showProductsWaitlist();
+          break;
         case RecieveShipment:
-            break;
+          recieveShipment();
+          break;
         default:
           System.out.println("Invalid choice");
       }
