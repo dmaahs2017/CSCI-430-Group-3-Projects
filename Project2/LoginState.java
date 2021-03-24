@@ -57,7 +57,7 @@ public class LoginState extends WareState{
         System.out.println("Invalid client password.");
       }      
     } else {
-      System.out.println("Invalid clerk username.");
+      System.out.println("Invalid client username.");
     }
   }
 
