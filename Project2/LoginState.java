@@ -86,7 +86,7 @@ public class LoginState extends WareState{
       if (ss.verifyPassword(manager, pass)){
         (WareContext.instance()).setLogin(WareContext.IsManager);
         (WareContext.instance()).setUser("manager");      
-        (WareContext.instance()).changeState(1);
+        (WareContext.instance()).changeState(2);
       } else {
         System.out.println("Invalid manager password.");
       }

@@ -56,4 +56,28 @@ public class InputUtils {
       }
     } while (true);
   }
+
+  public static int getInt(String prompt) {
+    do {
+      try {
+        String item = getToken(prompt);
+        Integer num = Integer.parseInt(item);
+        return num.intValue();
+      } catch (NumberFormatException nfe) {
+        System.out.println("Please input a number ");
+      }
+    } while (true);
+  }
+
+  public static double getDouble(String prompt) {
+    do {
+      try {
+        String item = getToken(prompt);
+        Double num = Double.parseDouble(item);
+        return num.doubleValue();
+      } catch (NumberFormatException nfe) {
+        System.out.println("Please input a number ");
+      }
+    } while (true);
+  }
 }
