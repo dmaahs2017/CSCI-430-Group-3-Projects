@@ -1,6 +1,7 @@
 import java.util.*;
 import java.io.*;
 import backend.*;
+import utils.*;
 
 public class LoginState extends WareState{
   private static final int CLIENT_LOGIN = 0;
@@ -33,7 +34,7 @@ public class LoginState extends WareState{
   public int getCommand() {
     do {
       try {
-        int value = Integer.parseInt(getToken("Enter command:" ));
+        int value = Integer.parseInt(InputUtils.getToken("Enter command:" ));
         if (value <= EXIT && value >= CLIENT_LOGIN) {
           return value;
         }
@@ -43,34 +44,11 @@ public class LoginState extends WareState{
     } while (true);
   }
 
-  public String getToken(String prompt) {
-    do {
-      try {
-        System.out.println(prompt);
-        String line = reader.readLine();
-        StringTokenizer tokenizer = new StringTokenizer(line,"\n\r\f");
-        if (tokenizer.hasMoreTokens()) {
-          return tokenizer.nextToken();
-        }
-      } catch (IOException ioe) {
-        System.exit(0);
-      }
-    } while (true);
-  }
- 
-  private boolean yesOrNo(String prompt) {
-    String more = getToken(prompt + " (Y|y)[es] or anything else for no");
-    if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
-      return false;
-    }
-    return true;
-  }
-
   private void client(){
     SecuritySystem ss = new SecuritySystem();
-    String user = getToken("Please input the client username: ");
+    String user = InputUtils.getToken("Please input the client username: ");
     if (Warehouse.instance().getClientById(user) != null){
-      String pass = getToken("Please input the client password: ");
+      String pass = InputUtils.getToken("Please input the client password: ");
       if (ss.verifyPassword(user, pass)) {
         (WareContext.instance()).setLogin(WareContext.IsClient);
         (WareContext.instance()).setUser(user.toString());      
@@ -85,9 +63,9 @@ public class LoginState extends WareState{
 
   private void clerk(){
     SecuritySystem ss = new SecuritySystem();
-    String clerk = getToken("Please input the clerk username: ");
+    String clerk = InputUtils.getToken("Please input the clerk username: ");
     if (clerk.equals("clerk")) { 
-      String pass = getToken("Please input the clerk password: ");
+      String pass = InputUtils.getToken("Please input the clerk password: ");
       if (ss.verifyPassword(clerk, pass)){
         (WareContext.instance()).setLogin(WareContext.IsClerk);
         (WareContext.instance()).setUser("clerk");      
@@ -102,9 +80,9 @@ public class LoginState extends WareState{
 
   private void manager(){
     SecuritySystem ss = new SecuritySystem();
-    String manager = getToken("Please input the manager username: ");
+    String manager = InputUtils.getToken("Please input the manager username: ");
     if (manager.equals("manager")) { 
-      String pass = getToken("Please input the manager password: ");
+      String pass = InputUtils.getToken("Please input the manager password: ");
       if (ss.verifyPassword(manager, pass)){
         (WareContext.instance()).setLogin(WareContext.IsManager);
         (WareContext.instance()).setUser("manager");      
