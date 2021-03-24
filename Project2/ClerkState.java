@@ -203,8 +203,8 @@ public class ClerkState extends WareState {
   public void logout()
   {
     if (WareContext.instance().getLogin() == WareContext.IsClerk)
-       {  //system.out.println(" going to clerk \n");
-        (WareContext.instance()).changeState(0); // exit to clerk with a code 0
+       {  //system.out.println(" going to login \n");
+        (WareContext.instance()).changeState(0); // exit to login with a code 0
        }
     else if (WareContext.instance().getLogin() == WareContext.IsManager)
        {  //system.out.println(" going to manager \n");
