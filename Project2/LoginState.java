@@ -1,5 +1,4 @@
 import java.util.*;
-import java.text.*;
 import java.io.*;
 public class LoginState extends WareState{
   private static final int CLIENT_LOGIN = 0;
@@ -7,12 +6,10 @@ public class LoginState extends WareState{
   private static final int MANAGER_LOGIN = 2;
   private static final int HELP = 3;
   private static final int EXIT = 4;
-  private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));  
-  private WareContext context;
+  private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static LoginState instance;
   private LoginState() {
       super();
-     // context = LibContext.instance();
   }
 
   public static LoginState instance() {
@@ -74,7 +71,7 @@ public class LoginState extends WareState{
       String pass = getToken("Please input the client password: ");
       if (ss.verifyPassword(user, pass)) {
         (WareContext.instance()).setLogin(WareContext.IsClient);
-        (WareContext.instance()).setUser(user);      
+        (WareContext.instance()).setUser(user.toString());      
         (WareContext.instance()).changeState(0);
       } else {
         System.out.println("Invalid client password.");
