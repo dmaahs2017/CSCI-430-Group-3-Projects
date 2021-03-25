@@ -113,8 +113,8 @@ public class Warehouse implements Serializable {
     }
 
     //add product
-    public Product addProduct(String name, int quantity, double salePrice, double supplyPrice) {
-        Product product = new Product(name, quantity, salePrice, supplyPrice);
+    public Product addProduct(String name, int quantity, double salePrice, double supplyPrice, String supplierId) {
+        Product product = new Product(name, quantity, salePrice, supplyPrice, supplierId);
 
         if (ProductList.instance().insertProduct(product)) {
             return product;

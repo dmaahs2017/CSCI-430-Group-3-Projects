@@ -72,8 +72,9 @@ public class ManagerState extends WareState {
       int quantity = InputUtils.getInt("Enter quantity");
       double salePrice = InputUtils.getDouble("Enter Sale Price");
       double supplyPrice = InputUtils.getDouble("Enter Supply Price");
+      String supplierId = InputUtils.getToken("Enter Supplier Id");
 
-      result = warehouse.addProduct(name, quantity, salePrice, supplyPrice);
+      result = warehouse.addProduct(name, quantity, salePrice, supplyPrice, supplierId);
       if (result != null) {
         System.out.println(result);
       } else {
@@ -95,20 +96,26 @@ public class ManagerState extends WareState {
   }
 
   public void showSuppliersForProduct() {
-      Iterator<Supplier> allSuppliers = warehouse.getSuppliers();
+      String targetProductId = InputUtils.getToken("Enter productId");
+      Iterator<Product> allProducts = warehouse.getProducts();
 
-      while (allSuppliers.hasNext()){
-        Supplier supplier = allSuppliers.next();
-        System.out.println(supplier.toString());
+      while (allProducts.hasNext()){
+        Product product = allProducts.next();
+        if (product.equals(targetProductId)) {
+          System.out.println(product.getSupplierId());
+        }
       }
   }
 
   public void showProductsForSupplier() {
-      Iterator<Supplier> allSuppliers = warehouse.getSuppliers();
+      String targetSupplierId = InputUtils.getToken("Enter supplierId");
+      Iterator<Product> allProducts = warehouse.getProducts();
 
-      while (allSuppliers.hasNext()){
-        Supplier supplier = allSuppliers.next();
-        System.out.println(supplier.toString());
+      while (allProducts.hasNext()){
+        Product product = allProducts.next();
+        if (product.equalsSupplierId(targetSupplierId)) {
+          System.out.println(product.toString());
+        }
       }
   }
 
