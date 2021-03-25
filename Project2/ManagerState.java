@@ -14,6 +14,7 @@ public class ManagerState extends WareState {
     SHOW_SUPPLIERS,
     SHOW_SUPPLIERS_FOR_PRODUCT,
     SHOW_PRODUCTS_FOR_SUPPLIER,
+    BECOME_CLIENT,
     BECOME_SALESCLERK,
     Help
   }
@@ -42,13 +43,14 @@ public class ManagerState extends WareState {
   }
 
   public void help() {
-    System.out.println("\nEnter a number between " + Operations.Exit + " and " + Operations.Help + " as explained below:");
+    System.out.println("\nEnter a number between " + Operations.Exit.ordinal() + " and " + Operations.Help.ordinal() + " as explained below:");
     System.out.println(Operations.ADD_SUPPLIER.ordinal() + " to add a supplier");
     System.out.println(Operations.ADD_PRODUCTS.ordinal() + " to add products");
     System.out.println(Operations.SHOW_SUPPLIERS.ordinal() + " to display all suppliers");
     System.out.println(Operations.SHOW_SUPPLIERS_FOR_PRODUCT.ordinal() + " to display all suppliers for a product");
     System.out.println(Operations.SHOW_PRODUCTS_FOR_SUPPLIER.ordinal() + " to display all products from a supplier");
-    System.out.println(Operations.BECOME_SALESCLERK.ordinal() + " to become a specific clerk, gives access to clerk operations");
+    System.out.println(Operations.BECOME_CLIENT.ordinal() + " to become a specific client, gives access to client operations");
+    System.out.println(Operations.BECOME_SALESCLERK.ordinal() + " to become a clerk, gives access to clerk operations");
     System.out.println(Operations.Exit.ordinal() + " to logout");
   }
 
@@ -114,9 +116,19 @@ public class ManagerState extends WareState {
     String user = InputUtils.getToken("Please input the clerk id: ");
     if (user.equals("clerk")) {
       (WareContext.instance()).setUser(user.toString());
-      (WareContext.instance()).changeState(1);
+      (WareContext.instance()).changeState(2);
     } else {
       System.out.println("Invalid clerk id.");
+    }
+  }
+
+  private void becomeClient() {
+    String user = InputUtils.getToken("Please input the client id: ");
+    if (Warehouse.instance().getClientById(user) != null){
+      (WareContext.instance()).setUser(user.toString());      
+      (WareContext.instance()).changeState(1);
+    } else {
+      System.out.println("Invalid client id.");
     }
   }
 
@@ -140,6 +152,9 @@ public class ManagerState extends WareState {
         case SHOW_PRODUCTS_FOR_SUPPLIER:
           showProductsForSupplier();
           break;
+        case BECOME_CLIENT:
+          becomeClient();
+          break;
         case BECOME_SALESCLERK:
           becomeClerk();
           break;
@@ -160,7 +175,7 @@ public class ManagerState extends WareState {
   public void logout()
   {
     if (WareContext.instance().getLogin() == WareContext.IsManager)
-       {  //system.out.println(" going to manager \n");
+       {  //system.out.println(" going to login \n");
         (WareContext.instance()).changeState(0); // exit to login with a code 0
        }
     else
