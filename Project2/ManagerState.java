@@ -99,6 +99,7 @@ public class ManagerState extends WareState {
       String targetProductId = InputUtils.getToken("Enter productId");
       Iterator<Product> allProducts = warehouse.getProducts();
 
+      System.out.println("Supplier Ids");
       while (allProducts.hasNext()){
         Product product = allProducts.next();
         if (product.equals(targetProductId)) {
@@ -111,6 +112,7 @@ public class ManagerState extends WareState {
       String targetSupplierId = InputUtils.getToken("Enter supplierId");
       Iterator<Product> allProducts = warehouse.getProducts();
 
+      System.out.println("Products");
       while (allProducts.hasNext()){
         Product product = allProducts.next();
         if (product.equalsSupplierId(targetSupplierId)) {
