@@ -45,13 +45,13 @@ public class ClerkState extends WareState {
 
   public void help() {
     System.out.println("\nEnter a number between " + Operations.Exit + " and " + Operations.Help + " as explained below:");
-    System.out.println(Operations.AddClient.ordinal() + "Add a new client");
-    System.out.println(Operations.ShowProducts.ordinal() + "Show products");
-    System.out.println(Operations.ShowClients.ordinal() + "Show clients");
-    System.out.println(Operations.ShowClientsWithOutstandingBalance.ordinal() + "Show clients and outstanding balance");
-    System.out.println(Operations.BecomeClient.ordinal() + "Become a specific client, gives access to client operations");
-    System.out.println(Operations.DisplayProductWaitlist.ordinal() + "Display waitlist for a product");
-    System.out.println(Operations.RecieveShipment.ordinal() + "Recieve a shipment");
+    System.out.println(Operations.AddClient.ordinal() + " to add a new client");
+    System.out.println(Operations.ShowProducts.ordinal() + " to show products");
+    System.out.println(Operations.ShowClients.ordinal() + " to show clients");
+    System.out.println(Operations.ShowClientsWithOutstandingBalance.ordinal() + " to show clients and outstanding balance");
+    System.out.println(Operations.BecomeClient.ordinal() + " to become a specific client, gives access to client operations");
+    System.out.println(Operations.DisplayProductWaitlist.ordinal() + " to display waitlist for a product");
+    System.out.println(Operations.RecieveShipment.ordinal() + " to recieve a shipment");
     System.out.println(Operations.Exit.ordinal() + " to logout");
   }
 
@@ -203,8 +203,8 @@ public class ClerkState extends WareState {
   public void logout()
   {
     if (WareContext.instance().getLogin() == WareContext.IsClerk)
-       {  //system.out.println(" going to clerk \n");
-        (WareContext.instance()).changeState(0); // exit to clerk with a code 0
+       {  //system.out.println(" going to login \n");
+        (WareContext.instance()).changeState(0); // exit to login with a code 0
        }
     else if (WareContext.instance().getLogin() == WareContext.IsManager)
        {  //system.out.println(" going to manager \n");
