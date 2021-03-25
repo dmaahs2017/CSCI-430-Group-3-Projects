@@ -113,13 +113,7 @@ public class ManagerState extends WareState {
   }
 
   private void becomeClerk() {
-    String user = InputUtils.getToken("Please input the clerk id: ");
-    if (user.equals("clerk")) {
-      (WareContext.instance()).setUser(user.toString());
-      (WareContext.instance()).changeState(2);
-    } else {
-      System.out.println("Invalid clerk id.");
-    }
+    (WareContext.instance()).changeState(2);
   }
 
   private void becomeClient() {
