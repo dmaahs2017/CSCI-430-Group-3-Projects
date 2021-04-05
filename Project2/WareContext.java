@@ -52,22 +52,52 @@ public class WareContext {
       warehouse = Warehouse.instance();
     }
     // set up the FSM and transition table;
-    states = new WareState[4];
+    states = new WareState[5];
     states[0] = ClientState.instance();
     states[1] = ClerkState.instance();
     states[2] = ManagerState.instance();
     states[3]=  LoginState.instance();
-    nextState = new int[4][4];
-    nextState[0][0] = 3;nextState[0][1] = 1;nextState[0][2] = 2;nextState[0][3] = -2; //ClientState transitions
-    nextState[1][0] = 3;nextState[1][1] = 0;nextState[1][2] = 2;nextState[1][3] = -2; //ClerkState transitions
-    nextState[2][0] = 3;nextState[2][1] = 0;nextState[2][2] = 1;nextState[2][3] = -2; //ManagerState transitions
-    nextState[3][0] = 0;nextState[3][1] = 1;nextState[3][2] = 2;nextState[3][3] = -1; //LoginState transitions
+    states[4] = ShoppingCartState.instance();
+
+
+    nextState = new int[5][5];
+    // ClientState Transitions
+    nextState[0][0] = 3; // -> login state
+    nextState[0][1] = 1; // -> clerk state
+    nextState[0][2] = 2; // Manager state
+    nextState[0][3] = -2; // Error
+    nextState[0][4] = 4; // -> ShoppingCartState
+
+    // ClerkState Transitions
+    nextState[1][0] = 3;
+    nextState[1][1] = 0;
+    nextState[1][2] = 2;
+    nextState[1][3] = -2;
+
+    // ManagerState Transitions
+    nextState[2][0] = 3;
+    nextState[2][1] = 0;
+    nextState[2][2] = 1;
+    nextState[2][3] = -2; 
+
+    // LoginState Transitions
+    nextState[3][0] = 0;
+    nextState[3][1] = 1;
+    nextState[3][2] = 2;
+    nextState[3][3] = -1;
+
+    // ShoppingCartState Transitions
+    nextState[4][0] = 0;
+    nextState[4][1] = -2;
+    nextState[4][2] = -2;
+    nextState[4][3] = -2;
+
+    //initial state
     currentState = 3;
   }
 
   public void changeState(int transition)
   {
-    System.out.println("current state " + currentState + " \n \n "); //debugging, can be commented out
     currentState = nextState[currentState][transition];
     if (currentState == -2) {
       System.out.println("Error has occurred");
@@ -76,14 +106,13 @@ public class WareContext {
     if (currentState == -1) {
       terminate();
     }
-    System.out.println("current state " + currentState + " \n \n "); //debugging, can be commented out
     states[currentState].run();
   }
 
   private void terminate()
   {
    if (InputUtils.yesOrNo("Save data?")) {
-      if (warehouse.save()) {
+      if (Warehouse.save()) {
          System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
        } else {
          System.out.println(" There has been an error in saving \n" );
@@ -107,6 +136,4 @@ public class WareContext {
   public static void main (String[] args){
     WareContext.instance().process(); 
   }
-
-
 }

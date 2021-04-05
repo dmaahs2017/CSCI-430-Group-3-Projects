@@ -12,11 +12,9 @@ public class ClientState extends WareState {
   private static final int SHOW_TRANSACTIONS = 2;
   private static final int SHOW_WAITLIST = 3;
   private static final int SHOW_PRODUCTS = 4;
-  private static final int VIEW_CART = 5;
-  private static final int ADD_TO_CART = 6;
-  private static final int MODIFY_CART = 7;
-  private static final int PLACE_ORDER = 8;
-  private static final int HELP = 9;
+  private static final int MANAGE_CART = 5;
+  private static final int PLACE_ORDER = 6;
+  private static final int HELP = 7;
   private ClientState() {
     warehouse = Warehouse.instance();
   }
@@ -48,9 +46,7 @@ public class ClientState extends WareState {
     System.out.println(SHOW_TRANSACTIONS + " to view your transactions");
     System.out.println(SHOW_WAITLIST + " to view your waitlisted items");
     System.out.println(SHOW_PRODUCTS + " to view available products and prices");
-    System.out.println(VIEW_CART + " to view your shopping cart");
-    System.out.println(ADD_TO_CART + " to add products to your shopping cart");
-    System.out.println(MODIFY_CART + " to modify your shopping cart");
+    System.out.println(MANAGE_CART + " to view, edit, and add products to your cart");
     System.out.println(PLACE_ORDER + " to place order");
     System.out.println("\n" + HELP + " for help");
     System.out.println(EXIT + " to logout");
@@ -138,6 +134,15 @@ public class ClientState extends WareState {
     } while (true);
   }
 
+  public void manageCart() {
+    if ((WareContext.instance()).getLogin() == WareContext.IsClient)
+       { 
+         (WareContext.instance()).changeState(4); // Transition to ShoppingCartState
+        }
+    else 
+        (WareContext.instance()).changeState(3); // Error
+  }
+
   public void modifyCart() {
     String clientId = WareContext.instance().getUser();
     Client client = warehouse.getClientById(clientId);
@@ -213,14 +218,8 @@ public class ClientState extends WareState {
         case SHOW_PRODUCTS:
           showProducts();
           break;
-        case VIEW_CART:
-          viewCart();
-          break;
-        case ADD_TO_CART:
-          addToCart();
-          break;
-        case MODIFY_CART:
-          modifyCart();
+        case MANAGE_CART:
+          manageCart();
           break;
         case PLACE_ORDER:
           placeOrder();
