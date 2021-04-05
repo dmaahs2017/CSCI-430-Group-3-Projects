@@ -18,6 +18,10 @@ public class TransactionList implements Serializable {
   public Iterator<Transaction> getTransactions() {
     return transactionList.iterator();
   }
+
+  public boolean isEmpty() {
+    return transactionList.isEmpty();
+  }
   
   public String toString() {
     return transactionList.toString();

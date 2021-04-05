@@ -170,7 +170,6 @@ public class Warehouse implements Serializable {
         return true;
     }
 
-
     //get client by id
     public Client getClientById(String id) {
         Iterator<Client> clients = ClientList.instance().getClients();

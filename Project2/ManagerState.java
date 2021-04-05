@@ -11,6 +11,8 @@ public class ManagerState extends WareState {
     Exit,
     ADD_SUPPLIER,
     ADD_PRODUCTS,
+    MODIFY_PURCHASE_PRICE,
+    ADD_SUPPLIER_FOR_PRODUCT,
     SHOW_SUPPLIERS,
     SHOW_SUPPLIERS_FOR_PRODUCT,
     SHOW_PRODUCTS_FOR_SUPPLIER,
@@ -46,6 +48,8 @@ public class ManagerState extends WareState {
     System.out.println("\nEnter a number between " + Operations.Exit.ordinal() + " and " + Operations.Help.ordinal() + " as explained below:");
     System.out.println(Operations.ADD_SUPPLIER.ordinal() + " to add a supplier");
     System.out.println(Operations.ADD_PRODUCTS.ordinal() + " to add products");
+    System.out.println(Operations.MODIFY_PURCHASE_PRICE.ordinal() + " to modify purchase price");
+    System.out.println(Operations.ADD_SUPPLIER_FOR_PRODUCT.ordinal() + " to add a supplier for a product");
     System.out.println(Operations.SHOW_SUPPLIERS.ordinal() + " to display all suppliers");
     System.out.println(Operations.SHOW_SUPPLIERS_FOR_PRODUCT.ordinal() + " to display all suppliers for a product");
     System.out.println(Operations.SHOW_PRODUCTS_FOR_SUPPLIER.ordinal() + " to display all products from a supplier");
@@ -99,11 +103,10 @@ public class ManagerState extends WareState {
       String targetProductId = InputUtils.getToken("Enter productId");
       Iterator<Product> allProducts = warehouse.getProducts();
 
-      System.out.println("Supplier Ids");
       while (allProducts.hasNext()){
         Product product = allProducts.next();
         if (product.equals(targetProductId)) {
-          System.out.println(product.getSupplierId());
+          System.out.println("\tSupplier: " + product.getSupplierId() + "\tPurchase Price: $" + product.getSalePrice());
         }
       }
   }
@@ -112,11 +115,11 @@ public class ManagerState extends WareState {
       String targetSupplierId = InputUtils.getToken("Enter supplierId");
       Iterator<Product> allProducts = warehouse.getProducts();
 
-      System.out.println("Products");
+      System.out.println("\nProducts:");
       while (allProducts.hasNext()){
         Product product = allProducts.next();
         if (product.equalsSupplierId(targetSupplierId)) {
-          System.out.println(product.toString());
+          System.out.println(product);
         }
       }
   }
@@ -160,6 +163,12 @@ public class ManagerState extends WareState {
           break;
         case BECOME_SALESCLERK:
           becomeClerk();
+          break;
+        case ADD_SUPPLIER_FOR_PRODUCT:
+          addProducts();
+          break;
+        case MODIFY_PURCHASE_PRICE:
+          addProducts();
           break;
         case Help:
           help();

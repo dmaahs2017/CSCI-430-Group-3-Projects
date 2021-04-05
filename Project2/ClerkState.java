@@ -10,9 +10,8 @@ public class ClerkState extends WareState {
   enum Operations {
     Exit,
     AddClient,
+    QueryClients,
     ShowProducts,
-    ShowClients,
-    ShowClientsWithOutstandingBalance,
     BecomeClient,
     DisplayProductWaitlist,
     RecieveShipment,
@@ -46,9 +45,8 @@ public class ClerkState extends WareState {
   public void help() {
     System.out.println("\nEnter a number between " + Operations.Exit + " and " + Operations.Help + " as explained below:");
     System.out.println(Operations.AddClient.ordinal() + " to add a new client");
+    System.out.println(Operations.QueryClients.ordinal() + " to query clients");
     System.out.println(Operations.ShowProducts.ordinal() + " to show products");
-    System.out.println(Operations.ShowClients.ordinal() + " to show clients");
-    System.out.println(Operations.ShowClientsWithOutstandingBalance.ordinal() + " to show clients and outstanding balance");
     System.out.println(Operations.BecomeClient.ordinal() + " to become a specific client, gives access to client operations");
     System.out.println(Operations.DisplayProductWaitlist.ordinal() + " to display waitlist for a product");
     System.out.println(Operations.RecieveShipment.ordinal() + " to recieve a shipment");
@@ -77,26 +75,6 @@ public class ClerkState extends WareState {
       }
   }
 
-  public void showClients() {
-      Iterator<Client> allClients = warehouse.getClients();
-
-      while (allClients.hasNext()){
-        Client client = allClients.next();
-        System.out.println(client.toString());
-      }
-  }
-
-  public void showBalance() {
-    Client result;
-    String id = InputUtils.getToken("Enter client id to see balance");
-
-    result = warehouse.getClientById(id);
-    if (result != null) {
-      System.out.println("Current Balance: $" + result.getBalance());
-    } else {
-      System.out.println("Could not find that client id");
-    }
-  }
 
   public void showProductsWaitlist() {
     int amt = 0;
@@ -160,6 +138,10 @@ public class ClerkState extends WareState {
     }
   }
 
+  public void queryClientsTransition() {
+      WareContext.instance().changeState(4); // Transition to ClientQueryState
+  }
+
   public void process() {
     Operations command;
     help();
@@ -171,14 +153,11 @@ public class ClerkState extends WareState {
         case AddClient:
           addClient();
           break;
+        case QueryClients:
+          queryClientsTransition();
+          break;
         case ShowProducts:
           showProducts();
-          break;
-        case ShowClients:
-          showClients();
-          break;
-        case ShowClientsWithOutstandingBalance:
-          showBalance();
           break;
         case BecomeClient:
           becomeClient();

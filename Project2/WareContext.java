@@ -52,15 +52,16 @@ public class WareContext {
       warehouse = Warehouse.instance();
     }
     // set up the FSM and transition table;
-    states = new WareState[5];
+    states = new WareState[6];
     states[0] = ClientState.instance();
     states[1] = ClerkState.instance();
     states[2] = ManagerState.instance();
     states[3]=  LoginState.instance();
     states[4] = ShoppingCartState.instance();
+    states[5] = ClientQueryState.instance();
 
 
-    nextState = new int[5][5];
+    nextState = new int[6][5];
     // ClientState Transitions
     nextState[0][0] = 3; // -> login state
     nextState[0][1] = 1; // -> clerk state
@@ -73,6 +74,7 @@ public class WareContext {
     nextState[1][1] = 0;
     nextState[1][2] = 2;
     nextState[1][3] = -2;
+    nextState[1][4] = 5; // -> ClientQueryState
 
     // ManagerState Transitions
     nextState[2][0] = 3;
@@ -88,9 +90,11 @@ public class WareContext {
 
     // ShoppingCartState Transitions
     nextState[4][0] = 0;
-    nextState[4][1] = -2;
-    nextState[4][2] = -2;
     nextState[4][3] = -2;
+
+    // ClientQueryState Transitions
+    nextState[5][0] = 1; // -> Clerk State
+    nextState[5][3] = -2; // Error
 
     //initial state
     currentState = 3;

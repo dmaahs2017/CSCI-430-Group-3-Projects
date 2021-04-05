@@ -135,12 +135,7 @@ public class ClientState extends WareState {
   }
 
   public void manageCart() {
-    if ((WareContext.instance()).getLogin() == WareContext.IsClient)
-       { 
-         (WareContext.instance()).changeState(4); // Transition to ShoppingCartState
-        }
-    else 
-        (WareContext.instance()).changeState(3); // Error
+     WareContext.instance().changeState(4); // Transition to ShoppingCartState
   }
 
   public void modifyCart() {

@@ -3,29 +3,28 @@ import java.text.*;
 import java.io.*;
 import backend.*;
 import utils.*;
-public class ShoppingCartState extends WareState {
-  private static ShoppingCartState cartState;
+public class ClientQueryState extends WareState {
+  private static ClientQueryState state;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static Warehouse warehouse;
 
   enum Operation {
     Exit,
-    ViewCartContents,
-    AddProduct,
-    RemoveProduct,
-    ChangeQuantityOfProduct,
+    DisplayAllClients,
+    DisplayClientsWithBalances,
+    DisplayClientsWithNoTransactions,
     Help,
   }
 
-  private ShoppingCartState() {
+  private ClientQueryState() {
     warehouse = Warehouse.instance();
   }
 
-  public static ShoppingCartState instance() {
-    if (cartState == null) {
-      return cartState = new ShoppingCartState();
+  public static ClientQueryState instance() {
+    if (state == null) {
+      return state = new ClientQueryState();
     } else {
-      return cartState;
+      return state;
     }
   }
 
@@ -46,10 +45,9 @@ public class ShoppingCartState extends WareState {
 
   public void help() {
     System.out.println("\nEnter a number between " + Operation.Exit + " and " + Operation.Help + " as explained below:");
-    System.out.println(Operation.ViewCartContents.ordinal() + " to view your cart");
-    System.out.println(Operation.AddProduct.ordinal() + " to add products to your cart");
-    System.out.println(Operation.RemoveProduct.ordinal() + " to remove products from your cart");
-    System.out.println(Operation.ChangeQuantityOfProduct.ordinal() + " to edit quantities of products in your cart");
+    System.out.println(Operation.DisplayAllClients.ordinal() + " to display all clients");
+    System.out.println(Operation.DisplayClientsWithBalances.ordinal() + " to display clients with outstanding balances");
+    System.out.println(Operation.DisplayClientsWithNoTransactions.ordinal() + " to display clients with no transactions");
     System.out.println(Operation.Exit.ordinal() + " to go back");
   }
 
@@ -137,6 +135,37 @@ public class ShoppingCartState extends WareState {
       }
     }
   }
+  
+  public void showClients() {
+      Iterator<Client> allClients = warehouse.getClients();
+
+      while (allClients.hasNext()){
+        Client client = allClients.next();
+        System.out.println(client.toString());
+      }
+  }
+
+  public void displayClientsWithBalances() {
+    Iterator<Client> allClients = warehouse.getClients();
+
+    while (allClients.hasNext()){
+      Client client = allClients.next();
+      if (client.getBalance() <= 0.0) {
+        System.out.println("\t" + client);
+      }
+    }
+  }
+
+  public void displayClientsWithNoTransactions() {
+    Iterator<Client> allClients = warehouse.getClients();
+
+    while (allClients.hasNext()){
+      Client client = allClients.next();
+      if (client.getTransactionList().isEmpty()) {
+        System.out.println("\t" + client);
+      }
+    }
+  }
 
   public void process() {
     Operation command;
@@ -146,32 +175,29 @@ public class ShoppingCartState extends WareState {
         case Help:
           help();
           break;
-        case AddProduct:
-          addToCart();
+        case DisplayAllClients:
+          showClients();
           break;
-        case ViewCartContents:
-          viewCart();
+        case DisplayClientsWithBalances:
+          displayClientsWithBalances();
           break;
-        case RemoveProduct:
-          removeProduct();
-          break;
-        case ChangeQuantityOfProduct:
-          modifyCart();
+        case DisplayClientsWithNoTransactions:
+          displayClientsWithNoTransactions();
           break;
         default:
           System.out.println("Invalid choice");
       }
     }
-    back();
+    logout();
   }
 
   public void run() {
     process();
   }
 
-  public void back()
+  public void logout()
   {
-       (WareContext.instance()).changeState(0); // client transition
+     (WareContext.instance()).changeState(0); // -> Manager
   }
  
 }
