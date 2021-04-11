@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import backend.*;
@@ -13,6 +15,7 @@ public class WareContext {
   public static final int IsClient = 0;
   public static final int IsClerk = 1;
   public static final int IsManager = 2;
+  private static JFrame warehouseFrame;
   private WareState[] states;
   private int[][] nextState;
 
@@ -30,6 +33,10 @@ public class WareContext {
     } catch(Exception cnfe) {
       cnfe.printStackTrace();
     }
+  }
+
+  public JFrame getFrame() {
+      return warehouseFrame;
   }
 
   public void setLogin(int code)
@@ -98,6 +105,15 @@ public class WareContext {
 
     //initial state
     currentState = 3;
+
+
+
+    // setup GUI JFrame
+    warehouseFrame = new JFrame("Library GUI");
+	warehouseFrame.addWindowListener(new WindowAdapter()
+       {public void windowClosing(WindowEvent e){System.exit(0);}});
+    warehouseFrame.setSize(400,400);
+    warehouseFrame.setLocation(400, 400);
   }
 
   public void changeState(int transition)

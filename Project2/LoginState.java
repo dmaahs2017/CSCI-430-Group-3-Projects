@@ -1,16 +1,25 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import backend.*;
 import utils.*;
 
-public class LoginState extends WareState{
+public class LoginState extends WareState implements ActionListener {
   private static final int CLIENT_LOGIN = 0;
   private static final int CLERK_LOGIN = 1;
   private static final int MANAGER_LOGIN = 2;
   private static final int HELP = 3;
   private static final int EXIT = 4;
-  private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static LoginState instance;
+
+  private AbstractButton clientButton, clerkButton, managerButton, logoutButton;
+
+  private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+  private JFrame frame;
+
+
   private LoginState() {
       super();
   }
@@ -22,107 +31,104 @@ public class LoginState extends WareState{
     return instance;
   }
 
-  public void help() {
-    System.out.println("\nEnter a number between " + CLIENT_LOGIN + " and " + EXIT + " as explained below:");
-    System.out.println(CLIENT_LOGIN + " to login as a client");
-    System.out.println(CLERK_LOGIN + " to login as a clerk");
-    System.out.println(MANAGER_LOGIN + " to login as a manager");
-    System.out.println("\n" + HELP + " for help");
-    System.out.println(EXIT + " to exit");
-  }
+  // Clean up the Gui
+  public void clear() { 
+    frame.getContentPane().removeAll();
+    frame.paint(frame.getGraphics());   
+  }  
 
-  public int getCommand() {
-    do {
-      try {
-        int value = Integer.parseInt(InputUtils.getToken("Enter command:" ));
-        if (value <= EXIT && value >= CLIENT_LOGIN) {
-          return value;
-        }
-      } catch (NumberFormatException nfe) {
-        System.out.println("Enter a number");
-      }
-    } while (true);
-  }
+  // ActionListener Interface
+  public void actionPerformed(ActionEvent event) {
+    if (event.getSource().equals(this.clientButton))
+       this.client();
+    else if (event.getSource().equals(this.clerkButton)) 
+      this.clerk();
+    else if (event.getSource().equals(this.managerButton)) 
+      this.manager();
+  } 
+
 
   private void client(){
     SecuritySystem ss = new SecuritySystem();
-    String user = InputUtils.getToken("Please input the client username: ");
+    String user = GuiInputUtils.promptInput(frame, "Please input client username: ");
     if (Warehouse.instance().getClientById(user) != null){
-      String pass = InputUtils.getToken("Please input the client password: ");
+      String pass = GuiInputUtils.promptInput(frame, "Please input the client password: ");
       if (ss.verifyPassword(user, pass)) {
         (WareContext.instance()).setLogin(WareContext.IsClient);
         (WareContext.instance()).setUser(user.toString());      
+        clear();
         (WareContext.instance()).changeState(0);
       } else {
-        System.out.println("Invalid client password.");
+        GuiInputUtils.informUser(frame, "Invalid Client Password");
       }      
     } else {
-      System.out.println("Invalid client username.");
+      GuiInputUtils.informUser(frame, "Invalid client username.");
     }
   }
 
   private void clerk(){
     SecuritySystem ss = new SecuritySystem();
-    String clerk = InputUtils.getToken("Please input the clerk username: ");
+    String clerk = GuiInputUtils.promptInput(frame, "Please input the clerk username: ");
     if (clerk.equals("clerk")) { 
-      String pass = InputUtils.getToken("Please input the clerk password: ");
+      String pass = GuiInputUtils.promptInput(frame, "Please input the clerk password: ");
       if (ss.verifyPassword(clerk, pass)){
         (WareContext.instance()).setLogin(WareContext.IsClerk);
         (WareContext.instance()).setUser("clerk");      
+        clear();
         (WareContext.instance()).changeState(1);
       } else {
-        System.out.println("Invalid clerk password.");
+        GuiInputUtils.informUser(frame, "Invalid clerk password.");
       }
     } else {
-      System.out.println("Invalid clerk username.");
+      GuiInputUtils.informUser(frame, "Invalid clerk username.");
     }
   }
 
   private void manager(){
     SecuritySystem ss = new SecuritySystem();
-    String manager = InputUtils.getToken("Please input the manager username: ");
+    String manager = GuiInputUtils.promptInput(frame, "Please input the manager username: ");
     if (manager.equals("manager")) { 
-      String pass = InputUtils.getToken("Please input the manager password: ");
+      String pass = GuiInputUtils.promptInput(frame, "Please input the manager password: ");
       if (ss.verifyPassword(manager, pass)){
         (WareContext.instance()).setLogin(WareContext.IsManager);
         (WareContext.instance()).setUser("manager");      
+        clear();
         (WareContext.instance()).changeState(2);
       } else {
-        System.out.println("Invalid manager password.");
+        GuiInputUtils.informUser(frame, "Invalid manager password.");
       }
     } else {
-      System.out.println("Invalid manager username.");
+      GuiInputUtils.informUser(frame, "Invalid manager username.");
     }
   } 
 
-  public void process() {
-    int command;
-    help();   
-    while ((command = getCommand()) != EXIT) {
-
-      switch (command) {
-        case HELP:
-          help();
-          break;
-        case CLIENT_LOGIN:
-          client();
-          break;
-        case CLERK_LOGIN:
-          clerk();
-          break;
-        case MANAGER_LOGIN:
-          manager();
-          break;
-        default:
-          System.out.println("Invalid choice");
-                                
-      }
-      help();
-    }
-    (WareContext.instance()).changeState(3); // exit
-  }
 
   public void run() {
-    process();
+     frame = WareContext.instance().getFrame();
+     frame.getContentPane().removeAll();
+     frame.getContentPane().setLayout(new FlowLayout());
+
+     // Define Buttons
+     clientButton = new JButton("Client");
+     clerkButton =  new JButton("Clerk");
+     managerButton = new JButton("Manager");
+     logoutButton = new JButton("Logout");  
+
+     // Add listeners
+     clientButton.addActionListener(this);
+     clerkButton.addActionListener(this);
+     managerButton.addActionListener(this);
+     logoutButton.addActionListener(this);
+
+     // Add Buttons to the frame
+     frame.getContentPane().add(this.clientButton);
+     frame.getContentPane().add(this.clerkButton);
+     frame.getContentPane().add(this.managerButton);
+     frame.getContentPane().add(this.logoutButton);
+
+     frame.setVisible(true);
+     frame.paint(frame.getGraphics()); 
+     frame.toFront();
+     frame.requestFocus();
   }
 }
