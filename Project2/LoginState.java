@@ -45,8 +45,14 @@ public class LoginState extends WareState implements ActionListener {
       this.clerk();
     else if (event.getSource().equals(this.managerButton)) 
       this.manager();
+    else if (event.getSource().equals(this.logoutButton))
+      this.logout();
   } 
 
+  private void logout() {
+    clear();
+    WareContext.instance().changeState(3);
+  }
 
   private void client(){
     SecuritySystem ss = new SecuritySystem();
