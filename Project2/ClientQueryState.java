@@ -209,9 +209,16 @@ public class ClientQueryState extends WareState implements ActionListener {
      frame.requestFocus();
   }
 
+  // Clear Gui Elements. To be used before transitions.
+  public void clear() { 
+    frame.getContentPane().removeAll();
+    frame.paint(frame.getGraphics());   
+  }  
+
   public void logout()
   {
-     (WareContext.instance()).changeState(0); // -> Manager
+    clear();
+    WareContext.instance().changeState(0); // -> Manager
   }
  
 }
