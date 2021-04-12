@@ -1,26 +1,27 @@
+import javax.swing.*;
+import java.awt.event.*;
+import java.awt.FlowLayout;
 import java.util.*;
 import java.text.*;
 import java.io.*;
 import backend.*;
 import utils.*;
-public class ShoppingCartState extends WareState {
+
+public class ShoppingCartState extends WareState implements ActionListener {
   private static ShoppingCartState cartState;
   private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
   private static Warehouse warehouse;
 
-  enum Operation {
-    Exit,
-    ViewCartContents,
-    AddProduct,
-    RemoveProduct,
-    ChangeQuantityOfProduct,
-    Help,
-  }
+  // GUI Fields
+  private JFrame frame;
+  private AbstractButton backButton, viewButton, addButton, editButton, removeButton;
 
+  // Constructor
   private ShoppingCartState() {
     warehouse = Warehouse.instance();
   }
 
+  // Instance
   public static ShoppingCartState instance() {
     if (cartState == null) {
       return cartState = new ShoppingCartState();
@@ -29,58 +30,57 @@ public class ShoppingCartState extends WareState {
     }
   }
 
-  public Operation getCommand() {
-    do {
-      try {
-        int value = Integer.parseInt(InputUtils.getToken("Enter command:" + Operation.Help.ordinal() + " for help"));
-        for ( Operation op : Operation.values() ) {
-          if ( value == op.ordinal() ) {
-            return op;
-          }
-        }
-      } catch (NumberFormatException nfe) {
-        System.out.println("Enter a number");
-      }
-    } while (true);
-  }
+  // ActionListener Interface
+  public void actionPerformed(ActionEvent event) {
+    if (event.getSource().equals(this.backButton))
+       this.back();
+    else if (event.getSource().equals(this.viewButton)) 
+      this.viewCart();
+    else if (event.getSource().equals(this.addButton)) 
+      this.addToCart();
+    else if (event.getSource().equals(this.editButton)) 
+      this.modifyCart();
+    else if (event.getSource().equals(this.removeButton)) 
+      this.removeProduct();
+  } 
 
-  public void help() {
-    System.out.println("\nEnter a number between " + Operation.Exit + " and " + Operation.Help + " as explained below:");
-    System.out.println(Operation.ViewCartContents.ordinal() + " to view your cart");
-    System.out.println(Operation.AddProduct.ordinal() + " to add products to your cart");
-    System.out.println(Operation.RemoveProduct.ordinal() + " to remove products from your cart");
-    System.out.println(Operation.ChangeQuantityOfProduct.ordinal() + " to edit quantities of products in your cart");
-    System.out.println(Operation.Exit.ordinal() + " to go back");
-  }
-
-
-  public void viewCart() {
+  private String getCart() {
     String clientId = WareContext.instance().getUser();
     Client client = warehouse.getClientById(clientId);
-    System.out.println("\n  Shopping Cart Contents:\n");
+
+    String output = new String();
     Iterator<ShoppingCartItem> cIterator = client.getShoppingCart().getShoppingCartProducts();
     while(cIterator.hasNext()) {
       ShoppingCartItem item = cIterator.next();
-      System.out.println("Product id: " + item.getProduct().getId() + ", name: " + item.getProduct().getName() + 
-        ", sale price: $" + item.getProduct().getSalePrice() + ", Quantity in cart: " + item.getQuantity());
+      output += "\tProduct id: " + item.getProduct().getId() + ", name: " + item.getProduct().getName() + 
+        ", sale price: $" + item.getProduct().getSalePrice() + ", Quantity in cart: " + item.getQuantity() + "\n";
     }
-    System.out.println("\n  End of cart. \n" );
+    return output;
+  }
+
+  public void viewCart() {
+    String output = getCart();
+
+    if (output.length() > 0)
+      GuiInputUtils.informUser(frame, "Shopping Cart:\n" + output);
+    else 
+      GuiInputUtils.informUser(frame, "Shopping Cart is empty.");
+
   }
   
   public void addToCart() {
     String clientId = WareContext.instance().getUser();
     do {
-      String productId = InputUtils.getToken("Enter product id");
+      String productId = GuiInputUtils.promptInput(frame, "Enter product id");
       Product product = warehouse.getProductById(productId);
       if(product != null) {
-        System.out.println("Product found:");
-        System.out.println("id:" + product.getId() + ", name: " + product.getName() + ", Sale Price: $" + product.getSalePrice() + "\n");
-        int productQuantity = InputUtils.getNumber("Enter quantity");
+        String output = "\tid:" + product.getId() + ", name: " + product.getName() + ", Sale Price: $" + product.getSalePrice() + "\n";
+        int productQuantity = GuiInputUtils.getNumber(frame, "Enter Quantity for Product:\n" + output);
         warehouse.addToCart(clientId, product, productQuantity);
       } else {
-        System.out.println("Could not find that product id");
+        GuiInputUtils.informUser(frame, "Could not find that product id");
       }
-      if (!InputUtils.yesOrNo("Add another product to the shopping cart?")) {
+      if (!GuiInputUtils.yesOrNo(frame, "Add another product to the shopping cart?")) {
         break;
       }
     } while (true);
@@ -93,15 +93,14 @@ public class ShoppingCartState extends WareState {
     Boolean doneEditing = false;
 
     while (!doneEditing) {
-      viewCart();
-      String productId = InputUtils.getToken("Enter Product ID from cart to remove");
+      String currentCart = getCart();
+      String productId = GuiInputUtils.promptInput(frame, "Cart:\n" + currentCart + "\n\nEnter Product ID from cart to remove");
 
       boolean wasSuccessful = cart.removeItem(productId);
       if ( !wasSuccessful ) {
-        doneEditing = !InputUtils.yesOrNo("That ID was not found in the shoping cart? Continue?");
+        doneEditing = !GuiInputUtils.yesOrNo(frame, "That ID was not found in the shoping cart? Continue?");
       } else {
-        System.out.println("Successfully Removed Product");
-        doneEditing = !InputUtils.yesOrNo("Remove More Products?");
+        doneEditing = !GuiInputUtils.yesOrNo(frame, "Successfully Removed Product.\nRemove More Products?");
       }
     }
   }
@@ -113,8 +112,8 @@ public class ShoppingCartState extends WareState {
     Boolean doneEditing = false;
 
     while (!doneEditing) {
-      viewCart();
-      String productId = InputUtils.getToken("Enter Product ID from cart to edit");
+      String currentCart = getCart();
+      String productId = GuiInputUtils.promptInput(frame, "Cart\n" + currentCart + "\n\nEnter Product ID from cart to edit");
 
       // find the product in the shopping cart
       ShoppingCartItem item = null;
@@ -128,45 +127,46 @@ public class ShoppingCartState extends WareState {
       }
 
       if ( item == null ) {
-        doneEditing = !InputUtils.yesOrNo("That ID was not found in the shoping cart? Continue?");
+        doneEditing = !GuiInputUtils.yesOrNo(frame, "That ID was not found in the shoping cart? Continue?");
       } else {
-        int newQuantity = InputUtils.getNumber("Enter the desired amount to put in your shopping cart.");
-
+        int newQuantity = GuiInputUtils.getNumber(frame, "Enter the desired amount to put in your shopping cart.");
         item.setQuantity(newQuantity);
-        doneEditing = !InputUtils.yesOrNo("Would you like to edit more items in your cart?");
+        doneEditing = !GuiInputUtils.yesOrNo(frame, "Would you like to edit more items in your cart?");
       }
     }
   }
 
-  public void process() {
-    Operation command;
-    help();
-    while ((command = getCommand()) != Operation.Exit) {
-      switch (command) {
-        case Help:
-          help();
-          break;
-        case AddProduct:
-          addToCart();
-          break;
-        case ViewCartContents:
-          viewCart();
-          break;
-        case RemoveProduct:
-          removeProduct();
-          break;
-        case ChangeQuantityOfProduct:
-          modifyCart();
-          break;
-        default:
-          System.out.println("Invalid choice");
-      }
-    }
-    back();
-  }
 
   public void run() {
-    process();
+     frame = WareContext.instance().getFrame();
+     frame.getContentPane().removeAll();
+     frame.getContentPane().setLayout(new FlowLayout());
+
+     // Define Buttons
+     backButton = new JButton("Back");
+     viewButton = new JButton("View Cart");
+     addButton = new JButton("Add Product To Cart");
+     editButton = new JButton("Edit Quantity of Items in Cart");
+     removeButton = new JButton("Remove Items From Cart");
+
+     // Add listeners
+     backButton.addActionListener(this);
+     viewButton.addActionListener(this);
+     addButton.addActionListener(this);
+     editButton.addActionListener(this);
+     removeButton.addActionListener(this);
+
+     // Add Buttons to the frame
+     frame.getContentPane().add(this.viewButton);
+     frame.getContentPane().add(this.addButton);
+     frame.getContentPane().add(this.editButton);
+     frame.getContentPane().add(this.removeButton);
+     frame.getContentPane().add(this.backButton);
+
+     frame.setVisible(true);
+     frame.paint(frame.getGraphics()); 
+     frame.toFront();
+     frame.requestFocus();
   }
 
   public void back()

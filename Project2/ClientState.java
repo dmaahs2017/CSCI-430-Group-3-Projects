@@ -227,8 +227,6 @@ public class ClientState extends WareState implements ActionListener {
      frame.getContentPane().removeAll();
      frame.getContentPane().setLayout(new FlowLayout());
 
-     // AbstractButton logoutButton, clientDetailsButton, transactionsButton, waitlistButton, getProductsButton, manageCartButton, placeOrderButton;
-     
      // Define Buttons
      logoutButton = new JButton("Logout");
      clientDetailsButton = new JButton("View Your Details");
