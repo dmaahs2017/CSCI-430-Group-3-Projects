@@ -27,4 +27,17 @@ public class GuiInputUtils {
       }
     } while (true);
   }
+
+  public static double getDouble(JFrame frame, String prompt) {
+    do {
+      try {
+        String item = promptInput(frame, prompt);
+        Double num = Double.parseDouble(item);
+        return num.doubleValue();
+      } catch (NumberFormatException nfe) {
+        GuiInputUtils.informUser(frame, "Please input a number ");
+      }
+    } while (true);
+  }
+
 }
