@@ -207,7 +207,7 @@ public class ClientState extends WareState implements ActionListener {
     if (cartIterator.hasNext()) {
     viewCart();
     String total = "Shopping Cart Total: $" + client.getShoppingCart().getTotalPrice() + "\n";
-      if(InputUtils.yesOrNo(total + "Are you sure you wish to place your order?")) {
+      if(GuiInputUtils.yesOrNo(frame, total + "Are you sure you wish to place your order?")) {
         if(warehouse.placeOrder(clientId)) {
           GuiInputUtils.informUser(frame, "Order placed: total price charged to your balance, shopping cart has been emptied, and invoice generated.");
         } else {
