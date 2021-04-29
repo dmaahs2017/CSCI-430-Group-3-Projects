@@ -24,7 +24,7 @@ public class EvenNumbersIterator implements Iterator
      */
     public EvenNumbersIterator(Iterator<Integer> iterator)
     {
-        if (iterator = null)
+        if (iterator == null)
         {
             throw new RuntimeException("Iterator cannot be null.");
         }
