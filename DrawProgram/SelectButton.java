@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.*;
 public class SelectButton  extends JButton implements ActionListener {
   protected JPanel drawingPanel;
   protected View view;
@@ -15,8 +16,9 @@ public class SelectButton  extends JButton implements ActionListener {
     mouseHandler = new MouseHandler();
   }
   public void actionPerformed(ActionEvent event) {
-    selectCommand = new SelectCommand();
+    view.setCursor(new Cursor(Cursor.CROSSHAIR_CURSOR));
     drawingPanel.addMouseListener(mouseHandler);
+    selectCommand = new SelectCommand();
     undoManager.beginCommand(selectCommand);
   }
   private class MouseHandler extends MouseAdapter {
@@ -29,6 +31,7 @@ public class SelectButton  extends JButton implements ActionListener {
 	   else {
 		   undoManager.cancelCommand();
 	   }
+      view.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
     }
   }
 }

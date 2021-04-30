@@ -24,6 +24,13 @@ public class Triangle extends Item {
     this.point2 = p2;
     this.point3 = null;
   }
+
+  public void translate(int x, int y) {
+    point1.setLocation(point1.getX() + x, point1.getY() + y);
+    point2.setLocation(point2.getX() + x, point2.getY() + y);
+    point3.setLocation(point3.getX() + x, point3.getY() + y);
+  }
+
   public boolean includes(Point point) {
     return ((distance(point, point1 ) < 10.0) || (distance(point, point2)< 10.0) || distance(point, point3) < 10.0);
   }

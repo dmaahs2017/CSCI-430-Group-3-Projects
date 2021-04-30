@@ -10,6 +10,12 @@ public class Line extends Item {
     this.point1 = point1;
 	point2 = null;
   }
+
+  public void translate(int x, int y) {
+    point1.setLocation(point1.getX() + x, point1.getY() + y);
+    point2.setLocation(point2.getX() + x, point2.getY() + y);
+  }
+
   public Line() {
 	  point1 = null;
 	  point2 = null;
