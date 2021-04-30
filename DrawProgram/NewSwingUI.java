@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.*;
+
 public class NewSwingUI implements UIContext {
   private Graphics graphics;
   private static NewSwingUI swingUI;
