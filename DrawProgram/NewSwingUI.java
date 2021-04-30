@@ -15,14 +15,10 @@ public class NewSwingUI implements UIContext {
   public  void setGraphics(Graphics graphics) {
     this.graphics = graphics;
   }
-  public void draw(Label label) {
-    if (label.getStartingPoint() != null) {
-      if (label.getText() != null) {
-        graphics.drawString(label.getText(), (int) label.getStartingPoint().getX(), (int) label.getStartingPoint().getY());
-      }
-    }
-    int length = graphics.getFontMetrics().stringWidth(label.getText());
-    graphics.drawString("_", (int) label.getStartingPoint().getX() + length, (int) label.getStartingPoint().getY());
+  public void drawLabel(Point p, String text) {
+    graphics.drawString(text, (int) p.getX(), (int) p.getY());
+    int length = graphics.getFontMetrics().stringWidth(text);
+    graphics.drawString("_", (int) p.getX() + length, (int) p.getY());
   }
   public void drawLine(Point point1,  Point point2) {
     int i1 = 0;
