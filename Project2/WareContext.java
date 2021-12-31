@@ -1,3 +1,5 @@
+import javax.swing.*;
+import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import backend.*;
@@ -13,6 +15,7 @@ public class WareContext {
   public static final int IsClient = 0;
   public static final int IsClerk = 1;
   public static final int IsManager = 2;
+  private static JFrame warehouseFrame;
   private WareState[] states;
   private int[][] nextState;
 
@@ -21,15 +24,19 @@ public class WareContext {
     try {
       Warehouse tempWarehouse = Warehouse.retrieve();
       if (tempWarehouse != null) {
-        System.out.println(" The warehouse has been successfully retrieved from the file WarehouseData \n" );
+        GuiInputUtils.informUser(warehouseFrame, " The warehouse has been successfully retrieved from the file WarehouseData \n" );
         warehouse = tempWarehouse;
       } else {
-        System.out.println("File doesnt exist; creating new warehouse" );
+        GuiInputUtils.informUser(warehouseFrame, "File doesnt exist; creating new warehouse" );
         warehouse = Warehouse.instance();
       }
     } catch(Exception cnfe) {
       cnfe.printStackTrace();
     }
+  }
+
+  public JFrame getFrame() {
+      return warehouseFrame;
   }
 
   public void setLogin(int code)
@@ -45,8 +52,7 @@ public class WareContext {
   { return userID;}
 
   private WareContext() { //constructor
-    //System.out.println("In WareContext constructor");
-    if (InputUtils.yesOrNo("Look for saved data and  use it?")) {
+    if (GuiInputUtils.yesOrNo(warehouseFrame, "Look for saved data and  use it?")) {
       retrieve();
     } else {
       warehouse = Warehouse.instance();
@@ -98,13 +104,22 @@ public class WareContext {
 
     //initial state
     currentState = 3;
+
+
+
+    // setup GUI JFrame
+    warehouseFrame = new JFrame("Library GUI");
+	warehouseFrame.addWindowListener(new WindowAdapter()
+       {public void windowClosing(WindowEvent e){System.exit(0);}});
+    warehouseFrame.setSize(400,400);
+    warehouseFrame.setLocation(400, 400);
   }
 
   public void changeState(int transition)
   {
     currentState = nextState[currentState][transition];
     if (currentState == -2) {
-      System.out.println("Error has occurred");
+      GuiInputUtils.informUser(warehouseFrame, "Error has occurred");
       terminate();
     }
     if (currentState == -1) {
@@ -115,19 +130,18 @@ public class WareContext {
 
   private void terminate()
   {
-   if (InputUtils.yesOrNo("Save data?")) {
+   if (GuiInputUtils.yesOrNo(warehouseFrame, "Save data?")) {
       if (Warehouse.save()) {
-         System.out.println(" The warehouse has been successfully saved in the file WarehouseData \n" );
+         GuiInputUtils.informUser(warehouseFrame, " The warehouse has been successfully saved in the file WarehouseData \n" );
        } else {
-         System.out.println(" There has been an error in saving \n" );
+         GuiInputUtils.informUser(warehouseFrame, " There has been an error in saving \n" );
        }
      }
-   System.out.println(" Goodbye \n "); System.exit(0);
+   GuiInputUtils.informUser(warehouseFrame, " Goodbye \n "); System.exit(0);
   }
 
   public static WareContext instance() {
     if (context == null) {
-       System.out.println("calling constructor");
       context = new WareContext();
     }
     return context;

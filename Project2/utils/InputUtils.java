@@ -57,6 +57,8 @@ public class InputUtils {
     } while (true);
   }
 
+
+  // Depracated
   public static int getInt(String prompt) {
     do {
       try {
